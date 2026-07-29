@@ -3,6 +3,7 @@
 import { motion } from "framer-motion";
 import Link from "next/link";
 import { formatDate, formatDistance, formatPace, mpsToSecPerKm } from "@/lib/format";
+import { springSmooth, tapScaleSmall } from "@/lib/motion";
 import type { GarminActivitySummary, PlannedSession } from "@/lib/types";
 import { KindBadge } from "./ui/Badges";
 
@@ -20,7 +21,7 @@ export function ActivityListRow({
   dayOffset?: number | null;
 }) {
   const content = (
-    <div className="flex flex-wrap items-center justify-between gap-3 rounded-2xl border border-hairline bg-surface p-4 transition-colors hover:border-accent/40">
+    <div className={`card flex flex-wrap items-center justify-between gap-3 p-4 ${actual ? "card-interactive" : ""}`}>
       <div className="flex items-center gap-3">
         <div className="flex w-12 shrink-0 flex-col items-center rounded-xl bg-page py-1.5">
           <span className="text-[10px] font-semibold uppercase text-ink-muted">{planned.day}</span>
@@ -54,9 +55,10 @@ export function ActivityListRow({
 
   return (
     <motion.div
-      initial={{ opacity: 0, y: 12 }}
+      initial={{ opacity: 0, y: 10 }}
       animate={{ opacity: 1, y: 0 }}
-      transition={{ delay: Math.min(index * 0.04, 0.4), duration: 0.4, ease: [0.22, 1, 0.36, 1] }}
+      whileTap={actual ? tapScaleSmall : undefined}
+      transition={{ ...springSmooth, delay: Math.min(index * 0.04, 0.4) }}
     >
       {actual ? <Link href={`/entrenamientos/${actual.activityId}`}>{content}</Link> : content}
     </motion.div>

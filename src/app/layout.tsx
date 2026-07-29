@@ -14,7 +14,7 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "Puebla 21K — Plan de entrenamiento",
+  title: "Garmin Coach by Mario Galindo",
   description:
     "Panel de entrenamiento conectado a Garmin Connect para el Medio Maratón de Puebla: plan de 13 semanas, comparación de sesiones y análisis de cada entrenamiento.",
 };

@@ -8,7 +8,7 @@ import { isRunningActivity, matchActivitiesToPlan } from "@/lib/planMatch";
 import { readActivitiesCache } from "@/lib/store";
 
 export const metadata = {
-  title: "Entrenamientos · Puebla 21K",
+  title: "Entrenamientos · Garmin Coach",
 };
 
 // Reads live Redis state (synced activities) — never prerender this at build time.
@@ -32,8 +32,8 @@ export default async function EntrenamientosPage() {
     <div className="mx-auto max-w-4xl space-y-6 px-4 py-6 sm:px-6 sm:py-10">
       <div className="flex flex-wrap items-center justify-between gap-4">
         <div>
-          <p className="text-sm font-medium text-accent">Historial</p>
-          <h1 className="mt-1 text-3xl font-bold tracking-tight sm:text-4xl">Entrenamientos</h1>
+          <p className="eyebrow text-accent">Historial</p>
+          <h1 className="mt-2 text-4xl font-bold sm:text-5xl">Entrenamientos</h1>
         </div>
         <SyncButton />
       </div>

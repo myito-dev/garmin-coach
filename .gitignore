@@ -40,6 +40,12 @@ yarn-error.log*
 # local Garmin session + activity cache — never commit
 /local-data/
 
+# local agent/design skills (npx skills add) — dev-machine tooling, not app code
+/.agents/
+/.claude/
+/.codex/
+skills-lock.json
+
 # typescript
 *.tsbuildinfo
 next-env.d.ts

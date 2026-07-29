@@ -64,7 +64,14 @@ export function SplitsChart({ splits, targetPace }: { splits: ActivitySplit[]; t
           )}
           <Tooltip
             cursor={{ fill: c.gridline, opacity: 0.4 }}
-            contentStyle={{ background: c.surface, border: `1px solid ${c.gridline}`, borderRadius: 12, fontSize: 12, color: c.ink }}
+            contentStyle={{
+              background: c.surface,
+              border: `1px solid ${c.gridline}`,
+              borderRadius: 14,
+              fontSize: 12,
+              color: c.ink,
+              boxShadow: "0 8px 24px -8px rgb(0 0 0 / 0.18)",
+            }}
             formatter={(value, _name, item) => {
               const paceSec = typeof value === "number" ? value : Number(value);
               const hr = (item?.payload as { hr?: number } | undefined)?.hr;
@@ -72,7 +79,7 @@ export function SplitsChart({ splits, targetPace }: { splits: ActivitySplit[]; t
             }}
             labelFormatter={(label) => `Km ${label}`}
           />
-          <Bar dataKey="paceSec" radius={[4, 4, 0, 0]} maxBarSize={28}>
+          <Bar dataKey="paceSec" radius={[6, 6, 0, 0]} maxBarSize={28} animationDuration={450} animationEasing="ease-out">
             {data.map((d) => (
               <Cell key={d.km} fill={d.color} />
             ))}

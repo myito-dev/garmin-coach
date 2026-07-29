@@ -1,4 +1,4 @@
-# Puebla 21K — Panel de entrenamiento
+# Garmin Coach by Mario Galindo
 
 App conectada a Garmin Connect para seguir el plan de 13 semanas hacia el Medio Maratón de Puebla: compara cada
 entrenamiento contra el plan, revisa insights automáticos (ritmo, frecuencia cardíaca, cadencia) y visualiza el

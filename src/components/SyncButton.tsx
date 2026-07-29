@@ -3,6 +3,7 @@
 import { motion } from "framer-motion";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
+import { springSnappy, tapScale } from "@/lib/motion";
 
 export function SyncButton({ compact = false }: { compact?: boolean }) {
   const router = useRouter();
@@ -33,7 +34,8 @@ export function SyncButton({ compact = false }: { compact?: boolean }) {
         type="button"
         onClick={handleSync}
         disabled={status === "loading"}
-        whileTap={{ scale: 0.96 }}
+        whileTap={tapScale}
+        transition={springSnappy}
         className={`inline-flex items-center gap-2 rounded-full bg-accent text-accent-ink font-medium shadow-sm transition-opacity disabled:opacity-60 ${
           compact ? "px-3.5 py-1.5 text-xs" : "px-5 py-2.5 text-sm"
         }`}

@@ -5,7 +5,7 @@ import { SyncButton } from "@/components/SyncButton";
 import { DisconnectButton } from "@/components/DisconnectButton";
 
 export const metadata = {
-  title: "Conectar Garmin · Puebla 21K",
+  title: "Conectar Garmin · Garmin Coach",
 };
 
 // Reads live Redis state (session + sync status) — never prerender this at build time.
@@ -18,8 +18,8 @@ export default async function ConectarPage() {
   return (
     <div className="mx-auto max-w-2xl space-y-6 px-4 py-6 sm:px-6 sm:py-10">
       <div>
-        <p className="text-sm font-medium text-accent">Puente con Garmin Connect</p>
-        <h1 className="mt-1 text-3xl font-bold tracking-tight sm:text-4xl">Conectar tu reloj</h1>
+        <p className="eyebrow text-accent">Puente con Garmin Connect</p>
+        <h1 className="mt-2 text-4xl font-bold sm:text-5xl">Conectar tu reloj</h1>
         <p className="mt-2 text-ink-secondary">
           Esta app se conecta a tu cuenta de Garmin Connect desde el servidor, con tus credenciales guardadas
           de forma privada como variables de entorno — nunca se envían al navegador ni a ningún tercero.

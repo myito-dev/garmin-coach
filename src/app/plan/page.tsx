@@ -4,7 +4,7 @@ import { GlassCard } from "@/components/ui/GlassCard";
 import { formatDateLong, todayIso } from "@/lib/format";
 
 export const metadata = {
-  title: "Plan · Puebla 21K",
+  title: "Plan · Garmin Coach",
 };
 
 export default function PlanPage() {
@@ -13,8 +13,8 @@ export default function PlanPage() {
   return (
     <div className="mx-auto max-w-4xl space-y-6 px-4 py-6 sm:px-6 sm:py-10">
       <div>
-        <p className="text-sm font-medium text-accent">Plan de 13 semanas</p>
-        <h1 className="mt-1 text-3xl font-bold tracking-tight sm:text-4xl">{RACE.name}</h1>
+        <p className="eyebrow text-accent">Plan de 13 semanas</p>
+        <h1 className="mt-2 text-4xl font-bold sm:text-5xl">{RACE.name}</h1>
         <p className="mt-2 text-ink-secondary">
           Objetivo {RACE.goalTimeLabel} · Carrera el {formatDateLong(RACE.date)}
         </p>

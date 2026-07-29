@@ -2,6 +2,7 @@
 
 import { motion } from "framer-motion";
 import { formatPace } from "@/lib/format";
+import { springSmooth } from "@/lib/motion";
 
 export function PaceBand({
   fastSecPerKm,
@@ -36,16 +37,16 @@ export function PaceBand({
       </div>
       <div className="relative h-3 rounded-full bg-page">
         <motion.div
-          initial={{ width: 0 }}
-          animate={{ width: `${bandRight - bandLeft}%` }}
-          transition={{ duration: 0.8, ease: [0.22, 1, 0.36, 1] }}
+          initial={{ scaleX: 0 }}
+          animate={{ scaleX: 1 }}
+          transition={{ duration: 0.5, delay: 0.1 }}
           className="absolute inset-y-0 rounded-full bg-accent/25"
-          style={{ left: `${bandLeft}%` }}
+          style={{ left: `${bandLeft}%`, width: `${bandRight - bandLeft}%`, transformOrigin: "left" }}
         />
         <motion.div
           initial={{ left: "50%", opacity: 0 }}
           animate={{ left: `${markerX}%`, opacity: 1 }}
-          transition={{ duration: 1, ease: [0.22, 1, 0.36, 1], delay: 0.3 }}
+          transition={{ ...springSmooth, delay: 0.2 }}
           className="absolute top-1/2 h-5 w-5 -translate-x-1/2 -translate-y-1/2 rounded-full border-2 border-surface shadow-md"
           style={{ background: markerColor }}
         />

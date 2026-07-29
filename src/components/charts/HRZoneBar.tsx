@@ -3,6 +3,7 @@
 import { motion } from "framer-motion";
 import { HR_ZONES } from "@/data/trainingPlan";
 import { HR_ZONE_COLOR } from "@/lib/chartColors";
+import { springSmooth } from "@/lib/motion";
 import { useIsDark } from "@/lib/useIsDark";
 
 const SCALE_MIN = 90;
@@ -25,7 +26,7 @@ export function HRZoneBar({ avgHR, maxHR }: { avgHR?: number; maxHR?: number }) 
               key={z.zone}
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
-              transition={{ delay: z.zone * 0.05 }}
+              transition={{ duration: 0.3, delay: z.zone * 0.04 }}
               className="flex items-center justify-center text-[11px] font-semibold text-white"
               style={{ width: `${widthPct}%`, background: color }}
             >
@@ -37,7 +38,7 @@ export function HRZoneBar({ avgHR, maxHR }: { avgHR?: number; maxHR?: number }) 
           <motion.div
             initial={{ left: "50%", opacity: 0 }}
             animate={{ left: `${toPct(avgHR)}%`, opacity: 1 }}
-            transition={{ duration: 0.9, ease: [0.22, 1, 0.36, 1], delay: 0.3 }}
+            transition={{ ...springSmooth, delay: 0.25 }}
             className="absolute top-0 flex h-full -translate-x-1/2 flex-col items-center"
           >
             <div className="h-full w-0.5 bg-ink" />
@@ -47,7 +48,7 @@ export function HRZoneBar({ avgHR, maxHR }: { avgHR?: number; maxHR?: number }) 
           <motion.div
             initial={{ left: "50%", opacity: 0 }}
             animate={{ left: `${toPct(maxHR)}%`, opacity: 1 }}
-            transition={{ duration: 0.9, ease: [0.22, 1, 0.36, 1], delay: 0.45 }}
+            transition={{ ...springSmooth, delay: 0.35 }}
             className="absolute top-0 flex h-full -translate-x-1/2 flex-col items-center"
           >
             <div className="h-full w-0.5 border-l-2 border-dashed border-ink/60" />

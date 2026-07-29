@@ -12,6 +12,9 @@ const eslintConfig = defineConfig([
     "out/**",
     "build/**",
     "next-env.d.ts",
+    // Third-party agent skill packages (npx skills add) — not part of this app.
+    ".agents/**",
+    ".claude/**",
   ]),
 ]);
 

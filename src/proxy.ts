@@ -15,7 +15,7 @@ function loginPage(error?: boolean): string {
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Puebla 21K</title>
+  <title>Garmin Coach</title>
   <style>
     :root { color-scheme: light dark; }
     body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif; background: #f9f9f7; color: #0b0b0b; display: flex; min-height: 100vh; align-items: center; justify-content: center; margin: 0; padding: 1.5rem; }
@@ -29,7 +29,7 @@ function loginPage(error?: boolean): string {
 </head>
 <body>
   <form method="POST" action="/api/gate">
-    <h1>🏃 Puebla 21K</h1>
+    <h1>🏃 Garmin Coach</h1>
     <input type="password" name="password" placeholder="Contraseña" autofocus required />
     <button type="submit">Entrar</button>
     ${error ? `<p class="error">Contraseña incorrecta.</p>` : ""}

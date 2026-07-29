@@ -3,6 +3,21 @@
 import { motion } from "framer-motion";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
+import { springSnappy } from "@/lib/motion";
+
+function Logo({ compact = false }: { compact?: boolean }) {
+  return (
+    <Link href="/" className="flex items-center gap-2.5">
+      <span className={`brand-mark flex shrink-0 items-center justify-center rounded-xl text-white ${compact ? "h-7 w-7" : "h-9 w-9"}`}>
+        <ActivityIcon className={compact ? "h-3.5 w-3.5" : "h-4 w-4"} />
+      </span>
+      <span className="flex flex-col leading-none">
+        <span className="wordmark text-[15px]">Garmin Coach</span>
+        <span className="mt-0.5 text-[10px] font-medium tracking-wide text-ink-muted">by Mario Galindo</span>
+      </span>
+    </Link>
+  );
+}
 
 const LINKS = [
   { href: "/", label: "Panel", icon: HomeIcon },
@@ -19,12 +34,7 @@ export function NavBar() {
     <>
       <header className="sticky top-0 z-40 hidden border-b border-hairline glass sm:block">
         <div className="mx-auto flex max-w-6xl items-center justify-between px-6 py-3">
-          <Link href="/" className="flex items-center gap-2 font-semibold tracking-tight">
-            <span className="flex h-8 w-8 items-center justify-center rounded-xl bg-accent text-accent-ink">
-              <ActivityIcon className="h-4 w-4" />
-            </span>
-            <span>Puebla 21K</span>
-          </Link>
+          <Logo />
           <nav className="flex items-center gap-1 rounded-full border border-hairline bg-surface p-1">
             {LINKS.map((link) => {
               const active = pathname === link.href;
@@ -38,7 +48,7 @@ export function NavBar() {
                     <motion.span
                       layoutId="nav-pill"
                       className="absolute inset-0 rounded-full bg-accent"
-                      transition={{ type: "spring", stiffness: 400, damping: 32 }}
+                      transition={springSnappy}
                     />
                   )}
                   <span className={`relative z-10 ${active ? "text-accent-ink" : "text-ink-secondary"}`}>
@@ -54,12 +64,7 @@ export function NavBar() {
 
       {/* Mobile top bar */}
       <header className="sticky top-0 z-40 flex items-center justify-between border-b border-hairline glass px-4 py-3 sm:hidden">
-        <Link href="/" className="flex items-center gap-2 font-semibold tracking-tight">
-          <span className="flex h-7 w-7 items-center justify-center rounded-lg bg-accent text-accent-ink">
-            <ActivityIcon className="h-3.5 w-3.5" />
-          </span>
-          Puebla 21K
-        </Link>
+        <Logo compact />
       </header>
 
       {/* Mobile bottom tab bar */}
@@ -78,7 +83,7 @@ export function NavBar() {
                   <motion.span
                     layoutId="nav-pill-mobile"
                     className="absolute inset-0 rounded-xl bg-accent/10"
-                    transition={{ type: "spring", stiffness: 400, damping: 32 }}
+                    transition={springSnappy}
                   />
                 )}
                 <Icon className={`relative z-10 h-5 w-5 ${active ? "text-accent" : "text-ink-muted"}`} />

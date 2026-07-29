@@ -58,7 +58,7 @@ export default async function ActivityDetailPage({ params }: { params: Promise<{
           {planned && <KindBadge kind={planned.kind} />}
           <span className="text-sm text-ink-muted">{formatDateLong(activity.startTimeLocal.slice(0, 10))}</span>
         </div>
-        <h1 className="text-3xl font-bold tracking-tight sm:text-4xl">{activity.activityName}</h1>
+        <h1 className="text-4xl font-bold sm:text-5xl">{activity.activityName}</h1>
         {planned && (
           <p className="mt-1 text-ink-secondary">
             Plan: {planned.title}

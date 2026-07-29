@@ -2,6 +2,7 @@
 
 import { motion } from "framer-motion";
 import { useIsDark } from "@/lib/useIsDark";
+import { springSnappy, tapScaleSmall } from "@/lib/motion";
 
 function applyTheme(theme: "light" | "dark") {
   document.documentElement.setAttribute("data-theme", theme);
@@ -12,15 +13,17 @@ export function ThemeToggle() {
   const isDark = useIsDark();
 
   return (
-    <button
+    <motion.button
       type="button"
       aria-label={isDark ? "Cambiar a modo claro" : "Cambiar a modo oscuro"}
       onClick={() => applyTheme(isDark ? "light" : "dark")}
+      whileTap={tapScaleSmall}
+      transition={springSnappy}
       className="relative flex h-9 w-16 items-center rounded-full border border-hairline bg-surface px-1 transition-colors"
     >
       <motion.div
         layout
-        transition={{ type: "spring", stiffness: 500, damping: 32 }}
+        transition={{ ...springSnappy, bounce: 0.15 }}
         className="flex h-7 w-7 items-center justify-center rounded-full bg-accent text-accent-ink shadow-sm"
         style={{ marginLeft: isDark ? "calc(100% - 1.75rem)" : 0 }}
       >
@@ -40,6 +43,6 @@ export function ThemeToggle() {
           </svg>
         )}
       </motion.div>
-    </button>
+    </motion.button>
   );
 }

@@ -1,7 +1,9 @@
 "use client";
 
+import { motion } from "framer-motion";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
+import { springSnappy, tapScaleSmall } from "@/lib/motion";
 
 export function DisconnectButton() {
   const router = useRouter();
@@ -19,13 +21,15 @@ export function DisconnectButton() {
   }
 
   return (
-    <button
+    <motion.button
       type="button"
       onClick={handleDisconnect}
       disabled={loading}
+      whileTap={tapScaleSmall}
+      transition={springSnappy}
       className="rounded-full border border-hairline px-4 py-2 text-sm font-medium text-ink-secondary transition-colors hover:border-critical/40 hover:text-critical disabled:opacity-60"
     >
-      {loading ? "Borrando…" : "Desconectar y borrar caché local"}
-    </button>
+      {loading ? "Borrando…" : "Desconectar y borrar caché"}
+    </motion.button>
   );
 }

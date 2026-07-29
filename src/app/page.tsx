@@ -64,13 +64,18 @@ export default async function DashboardPage() {
   return (
     <div className="mx-auto max-w-6xl space-y-6 px-4 py-6 sm:px-6 sm:py-10">
       {/* Hero */}
-      <GlassCard className="overflow-hidden">
-        <div className="flex flex-col items-center gap-6 sm:flex-row sm:items-center sm:justify-between">
+      <GlassCard className="relative overflow-hidden">
+        <div
+          aria-hidden
+          className="pointer-events-none absolute -right-24 -top-24 h-72 w-72 rounded-full opacity-[0.15] blur-3xl"
+          style={{ background: "radial-gradient(circle, var(--accent), transparent 70%)" }}
+        />
+        <div className="relative flex flex-col items-center gap-6 sm:flex-row sm:items-center sm:justify-between">
           <div className="text-center sm:text-left">
-            <p className="text-sm font-medium text-accent">
+            <p className="eyebrow text-accent">
               {RACE.name} · {RACE.city}
             </p>
-            <h1 className="mt-1 text-balance text-3xl font-bold tracking-tight sm:text-4xl">Objetivo {RACE.goalTimeLabel}</h1>
+            <h1 className="mt-2 text-balance text-4xl font-bold sm:text-5xl">Objetivo {RACE.goalTimeLabel}</h1>
             <p className="mt-2 text-ink-secondary">{formatDateLong(RACE.date)}</p>
             {currentWeek && (
               <div className="mt-4 inline-flex items-center gap-2 rounded-full border border-hairline bg-page px-3 py-1.5 text-sm">

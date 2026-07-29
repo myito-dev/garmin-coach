@@ -3,6 +3,7 @@
 import { AnimatePresence, motion } from "framer-motion";
 import { useState } from "react";
 import { formatPaceRange } from "@/lib/format";
+import { easeOutStrong, springSnappy, tapScaleSmall } from "@/lib/motion";
 import type { PlannedSession } from "@/lib/types";
 import { KindBadge } from "./ui/Badges";
 import { SessionGuide } from "./SessionGuide";
@@ -13,9 +14,11 @@ export function SessionCard({ session, isToday = false }: { session: PlannedSess
 
   return (
     <div className={`rounded-2xl border p-4 transition-colors ${isToday ? "border-accent/50 bg-accent/5" : "border-hairline bg-surface"}`}>
-      <button
+      <motion.button
         type="button"
         onClick={() => hasGuide && setOpen((o) => !o)}
+        whileTap={hasGuide ? tapScaleSmall : undefined}
+        transition={springSnappy}
         className="flex w-full items-start justify-between gap-3 text-left"
       >
         <div className="flex gap-3">
@@ -40,7 +43,7 @@ export function SessionCard({ session, isToday = false }: { session: PlannedSess
         {hasGuide && (
           <motion.svg
             animate={{ rotate: open ? 180 : 0 }}
-            transition={{ duration: 0.2 }}
+            transition={springSnappy}
             width="16"
             height="16"
             viewBox="0 0 24 24"
@@ -54,14 +57,14 @@ export function SessionCard({ session, isToday = false }: { session: PlannedSess
             <path d="M6 9l6 6 6-6" />
           </motion.svg>
         )}
-      </button>
+      </motion.button>
       <AnimatePresence initial={false}>
         {open && (
           <motion.div
             initial={{ height: 0, opacity: 0 }}
             animate={{ height: "auto", opacity: 1 }}
             exit={{ height: 0, opacity: 0 }}
-            transition={{ duration: 0.3, ease: [0.22, 1, 0.36, 1] }}
+            transition={{ duration: 0.3, ease: easeOutStrong }}
             className="overflow-hidden"
           >
             <div className="ml-14 mt-4 border-t border-hairline pt-4">
