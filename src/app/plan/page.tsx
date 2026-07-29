@@ -14,7 +14,7 @@ export default function PlanPage() {
     <div className="mx-auto max-w-4xl space-y-6 px-4 py-6 sm:px-6 sm:py-10">
       <div>
         <p className="eyebrow text-accent">Plan de 13 semanas</p>
-        <h1 className="mt-2 text-4xl font-bold sm:text-5xl">{RACE.name}</h1>
+        <h1 className="font-display mt-2 text-5xl sm:text-6xl">{RACE.name}</h1>
         <p className="mt-2 text-ink-secondary">
           Objetivo {RACE.goalTimeLabel} · Carrera el {formatDateLong(RACE.date)}
         </p>

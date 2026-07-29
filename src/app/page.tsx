@@ -6,6 +6,7 @@ import { GlassCard } from "@/components/ui/GlassCard";
 import { CountdownRing } from "@/components/ui/CountdownRing";
 import { StatTile } from "@/components/ui/StatTile";
 import { KindBadge } from "@/components/ui/Badges";
+import { Marquee } from "@/components/Marquee";
 import { WeeklyVolumeChart, type WeeklyVolumePoint } from "@/components/charts/WeeklyVolumeChart";
 import { formatDateLong, formatPaceRange, daysUntil, paceLabelToSeconds, todayIso } from "@/lib/format";
 import { analyzeActivity } from "@/lib/insights";
@@ -53,6 +54,15 @@ export default async function DashboardPage() {
     summary: live.hasLiveData ? live.summary : DIAGNOSIS.summary,
   };
 
+  const marqueeItems = [
+    { text: `${daysLeft} días para la carrera`, spotlight: true },
+    { text: `Mejor 10K ${diag.best10k.timeLabel}` },
+    { text: currentWeek ? `${currentWeek.label} de 13` : "Plan de 13 semanas" },
+    { text: `Objetivo ${RACE.goalTimeLabel}`, spotlight: true },
+    { text: `Mejor medio ${diag.bestHalf.timeLabel}` },
+    { text: `Predicción Riegel ${diag.riegelPrediction}` },
+  ];
+
   const volumeData: WeeklyVolumePoint[] = WEEKS.map((w) => ({
     week: w.weekNumber,
     label: `S${w.weekNumber}`,
@@ -64,19 +74,27 @@ export default async function DashboardPage() {
   return (
     <div className="mx-auto max-w-6xl space-y-6 px-4 py-6 sm:px-6 sm:py-10">
       {/* Hero */}
-      <GlassCard className="relative overflow-hidden">
+      <GlassCard className="hero-glass relative overflow-hidden !p-0">
+        <div aria-hidden className="texture-topo pointer-events-none absolute inset-0" />
         <div
           aria-hidden
-          className="pointer-events-none absolute -right-24 -top-24 h-72 w-72 rounded-full opacity-[0.15] blur-3xl"
+          className="pointer-events-none absolute -right-16 -top-16 h-64 w-64 rounded-full opacity-[0.18] blur-3xl"
           style={{ background: "radial-gradient(circle, var(--accent), transparent 70%)" }}
         />
-        <div className="relative flex flex-col items-center gap-6 sm:flex-row sm:items-center sm:justify-between">
+        <div
+          aria-hidden
+          className="pointer-events-none absolute -bottom-24 -left-16 h-72 w-72 rounded-full opacity-[0.14] blur-3xl"
+          style={{ background: "radial-gradient(circle, var(--spotlight-chip), transparent 70%)" }}
+        />
+        <div className="relative flex flex-col items-center gap-8 px-5 py-8 sm:flex-row sm:items-center sm:justify-between sm:px-10 sm:py-12">
           <div className="text-center sm:text-left">
             <p className="eyebrow text-accent">
               {RACE.name} · {RACE.city}
             </p>
-            <h1 className="mt-2 text-balance text-4xl font-bold sm:text-5xl">Objetivo {RACE.goalTimeLabel}</h1>
-            <p className="mt-2 text-ink-secondary">{formatDateLong(RACE.date)}</p>
+            <h1 className="font-display mt-3 text-balance text-5xl leading-[0.95] sm:text-6xl lg:text-7xl">
+              Objetivo <span className="spotlight">{RACE.goalTimeLabel}</span>
+            </h1>
+            <p className="mt-3 text-ink-secondary">{formatDateLong(RACE.date)}</p>
             {currentWeek && (
               <div className="mt-4 inline-flex items-center gap-2 rounded-full border border-hairline bg-page px-3 py-1.5 text-sm">
                 <span className="h-2 w-2 rounded-full bg-accent" />
@@ -86,6 +104,7 @@ export default async function DashboardPage() {
           </div>
           <CountdownRing daysLeft={daysLeft} totalDays={planSpanDays} />
         </div>
+        <Marquee items={marqueeItems} />
       </GlassCard>
 
       <div className="grid gap-6 lg:grid-cols-3">

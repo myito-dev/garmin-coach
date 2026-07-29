@@ -19,7 +19,7 @@ export default async function ConectarPage() {
     <div className="mx-auto max-w-2xl space-y-6 px-4 py-6 sm:px-6 sm:py-10">
       <div>
         <p className="eyebrow text-accent">Puente con Garmin Connect</p>
-        <h1 className="mt-2 text-4xl font-bold sm:text-5xl">Conectar tu reloj</h1>
+        <h1 className="font-display mt-2 text-5xl sm:text-6xl">Conectar tu reloj</h1>
         <p className="mt-2 text-ink-secondary">
           Esta app se conecta a tu cuenta de Garmin Connect desde el servidor, con tus credenciales guardadas
           de forma privada como variables de entorno — nunca se envían al navegador ni a ningún tercero.

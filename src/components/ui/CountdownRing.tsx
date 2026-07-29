@@ -28,6 +28,7 @@ export function CountdownRing({
           strokeWidth={stroke}
         />
         <motion.circle
+          className="ring-glow"
           cx={size / 2}
           cy={size / 2}
           r={radius}

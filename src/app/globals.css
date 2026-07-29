@@ -17,6 +17,10 @@
   --serious: #ec835a;
   --critical: #d03b3b;
   --shadow-color: 220 20% 30%;
+  /* Decorative-only brand accent (never used for data/charts) — a headline word, a badge, a moment of energy. */
+  --spotlight-text: #5c7a00;
+  --spotlight-chip: #c8fa1e;
+  --spotlight-chip-ink: #16220a;
 }
 
 @media (prefers-color-scheme: dark) {
@@ -36,6 +40,7 @@
     --warning: #fab219;
     --serious: #ec835a;
     --critical: #e66767;
+    --spotlight-text: #c8fa1e;
   }
 }
 
@@ -52,6 +57,7 @@
   --accent: #3987e5;
   --accent-ink: #ffffff;
   --critical: #e66767;
+  --spotlight-text: #c8fa1e;
 }
 
 @theme inline {
@@ -69,6 +75,9 @@
   --color-warning: var(--warning);
   --color-serious: var(--serious);
   --color-critical: var(--critical);
+  --color-spotlight-text: var(--spotlight-text);
+  --color-spotlight-chip: var(--spotlight-chip);
+  --color-spotlight-chip-ink: var(--spotlight-chip-ink);
   --font-sans: var(--font-geist-sans), -apple-system, BlinkMacSystemFont, "SF Pro Text",
     "SF Pro Display", "Segoe UI", system-ui, sans-serif;
   --font-mono: var(--font-geist-mono), ui-monospace, monospace;
@@ -138,6 +147,41 @@ body {
   transform: translateY(-1px);
 }
 
+/* Real glassmorphism for the one or two hero moments per page — never on scrolling
+   content (backdrop-blur is expensive; reserve it for a small, static surface). */
+.hero-glass {
+  background: var(--surface);
+  border: 1px solid var(--border);
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) .hero-glass {
+    background: color-mix(in oklab, var(--surface) 58%, transparent);
+    backdrop-filter: blur(28px) saturate(1.5);
+    -webkit-backdrop-filter: blur(28px) saturate(1.5);
+    border: 1px solid rgba(255, 255, 255, 0.09);
+    box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.06), 0 24px 60px -24px rgb(0 0 0 / 0.6);
+  }
+}
+:root[data-theme="dark"] .hero-glass {
+  background: color-mix(in oklab, var(--surface) 58%, transparent);
+  backdrop-filter: blur(28px) saturate(1.5);
+  -webkit-backdrop-filter: blur(28px) saturate(1.5);
+  border: 1px solid rgba(255, 255, 255, 0.09);
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.06), 0 24px 60px -24px rgb(0 0 0 / 0.6);
+}
+
+/* Countdown dial reads as "lit" in dark mode, echoing glowing circular gauges. */
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) .ring-glow {
+    filter: drop-shadow(0 0 6px color-mix(in oklab, var(--accent) 70%, transparent))
+      drop-shadow(0 0 16px color-mix(in oklab, var(--accent) 45%, transparent));
+  }
+}
+:root[data-theme="dark"] .ring-glow {
+  filter: drop-shadow(0 0 6px color-mix(in oklab, var(--accent) 70%, transparent))
+    drop-shadow(0 0 16px color-mix(in oklab, var(--accent) 45%, transparent));
+}
+
 .wordmark {
   font-weight: 700;
   letter-spacing: -0.02em;
@@ -160,6 +204,38 @@ h1,
 h2,
 h3 {
   letter-spacing: -0.02em;
+}
+
+.font-display {
+  font-family: var(--font-display), var(--font-geist-sans), sans-serif;
+  letter-spacing: -0.03em;
+  font-weight: 700;
+}
+
+.spotlight {
+  color: var(--spotlight-text);
+}
+
+.spotlight-chip {
+  background: var(--spotlight-chip);
+  color: var(--spotlight-chip-ink);
+}
+
+/* Subtle organic line-art background, echoing a topographic map. Decorative, low-opacity, never on scrolling content. */
+.texture-topo {
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='400' height='400' viewBox='0 0 400 400'%3E%3Cg fill='none' stroke='%23000' stroke-width='1'%3E%3Cpath d='M-20 60 Q 100 10, 200 60 T 420 60'/%3E%3Cpath d='M-20 140 Q 100 90, 200 140 T 420 140'/%3E%3Cpath d='M-20 220 Q 100 170, 200 220 T 420 220'/%3E%3Cpath d='M-20 300 Q 100 250, 200 300 T 420 300'/%3E%3Cpath d='M-20 380 Q 100 330, 200 380 T 420 380'/%3E%3C/g%3E%3C/svg%3E");
+  background-size: 480px 480px;
+  opacity: 0.05;
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) .texture-topo {
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='400' height='400' viewBox='0 0 400 400'%3E%3Cg fill='none' stroke='%23fff' stroke-width='1'%3E%3Cpath d='M-20 60 Q 100 10, 200 60 T 420 60'/%3E%3Cpath d='M-20 140 Q 100 90, 200 140 T 420 140'/%3E%3Cpath d='M-20 220 Q 100 170, 200 220 T 420 220'/%3E%3Cpath d='M-20 300 Q 100 250, 200 300 T 420 300'/%3E%3Cpath d='M-20 380 Q 100 330, 200 380 T 420 380'/%3E%3C/g%3E%3C/svg%3E");
+    opacity: 0.06;
+  }
+}
+:root[data-theme="dark"] .texture-topo {
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='400' height='400' viewBox='0 0 400 400'%3E%3Cg fill='none' stroke='%23fff' stroke-width='1'%3E%3Cpath d='M-20 60 Q 100 10, 200 60 T 420 60'/%3E%3Cpath d='M-20 140 Q 100 90, 200 140 T 420 140'/%3E%3Cpath d='M-20 220 Q 100 170, 200 220 T 420 220'/%3E%3Cpath d='M-20 300 Q 100 250, 200 300 T 420 300'/%3E%3Cpath d='M-20 380 Q 100 330, 200 380 T 420 380'/%3E%3C/g%3E%3C/svg%3E");
+  opacity: 0.06;
 }
 
 .tabular {
@@ -185,4 +261,28 @@ h3 {
 .status-critical {
   color: var(--critical);
   background: color-mix(in oklab, var(--critical) 14%, transparent);
+}
+
+.marquee-mask {
+  mask-image: linear-gradient(to right, transparent, black 8%, black 92%, transparent);
+  -webkit-mask-image: linear-gradient(to right, transparent, black 8%, black 92%, transparent);
+}
+
+.marquee-track {
+  animation: marquee 32s linear infinite;
+}
+
+@keyframes marquee {
+  from {
+    transform: translateX(0);
+  }
+  to {
+    transform: translateX(-50%);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .marquee-track {
+    animation: none;
+  }
 }

@@ -10,7 +10,7 @@ export default function ConfiguracionPage() {
     <div className="mx-auto max-w-2xl space-y-6 px-4 py-6 sm:px-6 sm:py-10">
       <div>
         <p className="eyebrow text-accent">Preferencias</p>
-        <h1 className="mt-2 text-4xl font-bold sm:text-5xl">Configuración</h1>
+        <h1 className="font-display mt-2 text-5xl sm:text-6xl">Configuración</h1>
       </div>
 
       <GlassCard>

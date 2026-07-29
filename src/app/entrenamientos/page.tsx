@@ -33,7 +33,7 @@ export default async function EntrenamientosPage() {
       <div className="flex flex-wrap items-center justify-between gap-4">
         <div>
           <p className="eyebrow text-accent">Historial</p>
-          <h1 className="mt-2 text-4xl font-bold sm:text-5xl">Entrenamientos</h1>
+          <h1 className="font-display mt-2 text-5xl sm:text-6xl">Entrenamientos</h1>
         </div>
         <SyncButton />
       </div>
