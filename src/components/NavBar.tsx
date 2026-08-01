@@ -23,7 +23,7 @@ const LINKS = [
   { href: "/", label: "Panel", icon: HomeIcon },
   { href: "/plan", label: "Plan", icon: CalendarIcon },
   { href: "/entrenamientos", label: "Entrenamientos", icon: ActivityIcon },
-  { href: "/conectar", label: "Conectar", icon: WatchIcon },
+  { href: "/salud", label: "Salud", icon: HeartIcon },
   { href: "/configuracion", label: "Configuración", icon: SettingsIcon },
 ];
 
@@ -125,11 +125,10 @@ function ActivityIcon(props: React.SVGProps<SVGSVGElement>) {
   );
 }
 
-function WatchIcon(props: React.SVGProps<SVGSVGElement>) {
+function HeartIcon(props: React.SVGProps<SVGSVGElement>) {
   return (
     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" {...props}>
-      <circle cx="12" cy="12" r="7" />
-      <path d="M12 9v3l2 2M8 2h8M8 22h8" />
+      <path d="M20.8 4.6a5.5 5.5 0 00-7.8 0L12 5.6l-1-1a5.5 5.5 0 00-7.8 7.8l1 1L12 21l7.8-7.6 1-1a5.5 5.5 0 000-7.8z" />
     </svg>
   );
 }

@@ -7,12 +7,13 @@ import { CountdownRing } from "@/components/ui/CountdownRing";
 import { StatTile } from "@/components/ui/StatTile";
 import { KindBadge } from "@/components/ui/Badges";
 import { Marquee } from "@/components/Marquee";
+import { RecoveryCard } from "@/components/RecoveryCard";
 import { WeeklyVolumeChart, type WeeklyVolumePoint } from "@/components/charts/WeeklyVolumeChart";
 import { formatDateLong, formatPaceRange, daysUntil, paceLabelToSeconds, todayIso } from "@/lib/format";
 import { analyzeActivity } from "@/lib/insights";
 import { computeLiveDiagnosis } from "@/lib/diagnosis";
 import { actualKmForWeek, matchActivitiesToPlan } from "@/lib/planMatch";
-import { readActivitiesCache } from "@/lib/store";
+import { readActivitiesCache, readWellnessCache } from "@/lib/store";
 
 // Reads live Redis state (synced activities) — never prerender this at build time.
 export const dynamic = "force-dynamic";
@@ -20,6 +21,7 @@ export const dynamic = "force-dynamic";
 export default async function DashboardPage() {
   const today = todayIso();
   const cache = await readActivitiesCache();
+  const wellness = await readWellnessCache();
   const currentWeek = findWeekForDate(today);
   const todaySession = findSessionForDate(today);
   const daysLeft = Math.max(0, daysUntil(RACE.date));
@@ -167,6 +169,17 @@ export default async function DashboardPage() {
         </div>
       </GlassCard>
 
+      {/* Recovery */}
+      <GlassCard>
+        <div className="mb-4 flex items-center justify-between">
+          <h2 className="text-lg font-semibold">Recuperación</h2>
+          <Link href="/salud" className="text-sm font-medium text-accent">
+            Ver historial
+          </Link>
+        </div>
+        <RecoveryCard days={wellness.days} />
+      </GlassCard>
+
       <div className="grid gap-6 lg:grid-cols-2">
         {/* Diagnosis */}
         <GlassCard>
@@ -227,8 +240,8 @@ export default async function DashboardPage() {
         ) : (
           <p className="text-sm text-ink-secondary">
             Todavía no hay entrenamientos sincronizados. Conecta tu cuenta de Garmin desde{" "}
-            <Link href="/conectar" className="font-medium text-accent">
-              esta página
+            <Link href="/configuracion" className="font-medium text-accent">
+              Configuración
             </Link>
             .
           </p>

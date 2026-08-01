@@ -2,7 +2,8 @@ import "server-only";
 import { GarminConnect } from "garmin-connect";
 import type { IActivity } from "garmin-connect/dist/garmin/types/activity";
 import { readStoredToken, writeStoredToken } from "./store";
-import type { ActivitySplit, GarminActivitySummary, GarminTokenPair } from "./types";
+import type { ActivitySplit, GarminActivitySummary, GarminTokenPair, WellnessDay } from "./types";
+import { todayIso } from "./format";
 
 interface RawLapDTO {
   distance?: number;
@@ -97,6 +98,114 @@ export async function fetchActivitySplits(activityId: number): Promise<ActivityS
     averageCadenceSpm: lap.averageRunCadence || undefined,
     elevationGainM: lap.elevationGain || undefined,
   }));
+}
+
+interface RawSleepDTO {
+  sleepTimeSeconds?: number;
+  deepSleepSeconds?: number;
+  lightSleepSeconds?: number;
+  remSleepSeconds?: number;
+  awakeSleepSeconds?: number;
+  sleepScores?: { overall?: { value?: number } };
+}
+
+interface RawSleepData {
+  dailySleepDTO?: RawSleepDTO;
+  avgOvernightHrv?: number;
+  hrvStatus?: string;
+  restingHeartRate?: number;
+  bodyBatteryChange?: number;
+}
+
+interface RawHeartRate {
+  restingHeartRate?: number;
+  lastSevenDaysAvgRestingHeartRate?: number;
+}
+
+interface RawHrvBaseline {
+  hrvSummary?: {
+    weeklyAvg?: number;
+    lastNightAvg?: number;
+    baseline?: {
+      lowUpper?: number;
+      balancedLow?: number;
+      balancedUpper?: number;
+    };
+  };
+}
+
+function isoDateOf(d: Date): string {
+  const y = d.getFullYear();
+  const m = String(d.getMonth() + 1).padStart(2, "0");
+  const day = String(d.getDate()).padStart(2, "0");
+  return `${y}-${m}-${day}`;
+}
+
+/**
+ * Garmin's personal HRV "balanced range" thresholds for a given night — a
+ * rolling baseline computed over several weeks, not a fixed medical range.
+ * This is a separate undocumented endpoint from getSleepData's overnight
+ * HRV average (see the "Custom requests" pattern already used for splits).
+ */
+async function fetchHrvBaseline(client: GarminConnect, isoDate: string): Promise<RawHrvBaseline["hrvSummary"] | null> {
+  try {
+    const res = await client.get<RawHrvBaseline>(`https://connectapi.garmin.com/hrv-service/hrv/${isoDate}`);
+    return res?.hrvSummary ?? null;
+  } catch {
+    return null;
+  }
+}
+
+async function fetchWellnessDay(client: GarminConnect, date: Date): Promise<WellnessDay | null> {
+  const isoDate = isoDateOf(date);
+  const [sleep, hr, hrv] = await Promise.all([
+    client.getSleepData(date).catch(() => null) as Promise<RawSleepData | null>,
+    client.getHeartRate(date).catch(() => null) as Promise<RawHeartRate | null>,
+    fetchHrvBaseline(client, isoDate),
+  ]);
+  const dto = sleep?.dailySleepDTO;
+  const restingHeartRate = sleep?.restingHeartRate || hr?.restingHeartRate || undefined;
+  if (!dto?.sleepTimeSeconds && !restingHeartRate) return null;
+
+  return {
+    date: isoDate,
+    sleepSeconds: dto?.sleepTimeSeconds || undefined,
+    deepSleepSeconds: dto?.deepSleepSeconds || undefined,
+    lightSleepSeconds: dto?.lightSleepSeconds || undefined,
+    remSleepSeconds: dto?.remSleepSeconds || undefined,
+    awakeSleepSeconds: dto?.awakeSleepSeconds || undefined,
+    sleepScore: dto?.sleepScores?.overall?.value ?? undefined,
+    avgOvernightHrv: sleep?.avgOvernightHrv || hrv?.lastNightAvg || undefined,
+    hrvStatus: sleep?.hrvStatus || undefined,
+    hrvWeeklyAvg: hrv?.weeklyAvg || undefined,
+    hrvBaselineLowUpper: hrv?.baseline?.lowUpper || undefined,
+    hrvBaselineBalancedLow: hrv?.baseline?.balancedLow || undefined,
+    hrvBaselineBalancedUpper: hrv?.baseline?.balancedUpper || undefined,
+    restingHeartRate,
+    sevenDayAvgRestingHeartRate: hr?.lastSevenDaysAvgRestingHeartRate || undefined,
+    bodyBatteryChange: sleep?.bodyBatteryChange,
+  };
+}
+
+/**
+ * Sleep, HRV and resting-HR history — Garmin wellness data is per calendar
+ * day (not per activity), so this fetches a window of dates in parallel
+ * rather than paging through an activities-style list. `endIso` is the most
+ * recent date in the window (inclusive); pass an older date to page further
+ * back for a manual history backfill instead of re-fetching recent days.
+ */
+export async function fetchWellnessRange(days = 14, endIso?: string): Promise<WellnessDay[]> {
+  const client = await getAuthenticatedClient();
+  const end = new Date((endIso ?? todayIso()) + "T00:00:00");
+  const dates = Array.from({ length: days }, (_, i) => {
+    const d = new Date(end);
+    d.setDate(d.getDate() - i);
+    return d;
+  });
+  const results = await Promise.all(dates.map((d) => fetchWellnessDay(client, d)));
+  return results
+    .filter((w): w is WellnessDay => w !== null)
+    .sort((a, b) => (a.date < b.date ? -1 : 1));
 }
 
 export async function checkGarminConnection(): Promise<{ ok: boolean; userName?: string; error?: string }> {

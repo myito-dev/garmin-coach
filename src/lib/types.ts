@@ -97,6 +97,30 @@ export interface ActivitySplit {
   elevationGainM?: number;
 }
 
+/** One day of Garmin wellness/health data — separate from activities, synced by calendar date. */
+export interface WellnessDay {
+  /** ISO date, e.g. 2026-07-30 */
+  date: string;
+  sleepSeconds?: number;
+  deepSleepSeconds?: number;
+  lightSleepSeconds?: number;
+  remSleepSeconds?: number;
+  awakeSleepSeconds?: number;
+  /** Garmin's 0-100 sleep score for the night. */
+  sleepScore?: number;
+  avgOvernightHrv?: number;
+  /** e.g. "BALANCED", "UNBALANCED", "LOW", "POOR" — Garmin's own HRV status label. */
+  hrvStatus?: string;
+  hrvWeeklyAvg?: number;
+  /** Personal HRV baseline thresholds (ms), computed by Garmin over several weeks — not a fixed medical range. */
+  hrvBaselineLowUpper?: number;
+  hrvBaselineBalancedLow?: number;
+  hrvBaselineBalancedUpper?: number;
+  restingHeartRate?: number;
+  sevenDayAvgRestingHeartRate?: number;
+  bodyBatteryChange?: number;
+}
+
 /** Garmin OAuth1 + OAuth2 token pair, as returned by GarminConnect#exportToken(). Stored opaquely — only garmin.ts interprets its shape. */
 export interface GarminTokenPair {
   oauth1: unknown;

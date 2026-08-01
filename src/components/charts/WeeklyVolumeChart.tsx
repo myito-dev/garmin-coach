@@ -66,6 +66,8 @@ export function WeeklyVolumeChart({ data }: { data: WeeklyVolumePoint[] }) {
               color: c.ink,
               boxShadow: "0 8px 24px -8px rgb(0 0 0 / 0.18)",
             }}
+            labelStyle={{ color: c.ink }}
+            itemStyle={{ color: c.ink }}
             formatter={(value, name) => [`${value} km`, name === "plannedKm" ? "Plan" : "Real"]}
             labelFormatter={(label) => label}
           />

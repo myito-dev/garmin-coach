@@ -1,14 +1,20 @@
 import "server-only";
 import { getRedis } from "./kv";
-import type { ActivitySplit, GarminActivitySummary, GarminTokenPair } from "./types";
+import type { ActivitySplit, GarminActivitySummary, GarminTokenPair, WellnessDay } from "./types";
 
 const KEY_TOKEN = "garmin:token";
 const KEY_CACHE = "activities:cache";
+const KEY_WELLNESS_CACHE = "wellness:cache";
 const SPLITS_KEY_PREFIX = "splits:";
 
 interface ActivitiesCache {
   lastSyncedAt: string | null;
   activities: GarminActivitySummary[];
+}
+
+interface WellnessCache {
+  lastSyncedAt: string | null;
+  days: WellnessDay[];
 }
 
 export async function hasStoredToken(): Promise<boolean> {
@@ -34,10 +40,36 @@ export async function writeActivitiesCache(activities: GarminActivitySummary[]):
   await getRedis().set(KEY_CACHE, payload);
 }
 
+// Cap how many days of wellness history we keep, so the cache doesn't grow forever.
+const WELLNESS_MAX_DAYS = 400;
+
+export async function readWellnessCache(): Promise<WellnessCache> {
+  const cache = await getRedis().get<WellnessCache>(KEY_WELLNESS_CACHE);
+  return cache ?? { lastSyncedAt: null, days: [] };
+}
+
+/**
+ * Merges freshly-fetched days into whatever history is already cached
+ * (newer fetch wins on overlapping dates, since a day's data can still
+ * change as it progresses) instead of overwriting — each sync accumulates
+ * more history rather than only ever showing the last fetch window.
+ */
+export async function mergeWellnessCache(freshDays: WellnessDay[]): Promise<WellnessDay[]> {
+  const existing = await readWellnessCache();
+  const byDate = new Map(existing.days.map((d) => [d.date, d]));
+  for (const day of freshDays) byDate.set(day.date, day);
+  const merged = Array.from(byDate.values())
+    .sort((a, b) => (a.date < b.date ? -1 : 1))
+    .slice(-WELLNESS_MAX_DAYS);
+  const payload: WellnessCache = { lastSyncedAt: new Date().toISOString(), days: merged };
+  await getRedis().set(KEY_WELLNESS_CACHE, payload);
+  return merged;
+}
+
 export async function clearGarminSession(): Promise<void> {
   const redis = getRedis();
   const splitKeys = await redis.keys(`${SPLITS_KEY_PREFIX}*`);
-  await redis.del(KEY_TOKEN, KEY_CACHE, ...splitKeys);
+  await redis.del(KEY_TOKEN, KEY_CACHE, KEY_WELLNESS_CACHE, ...splitKeys);
 }
 
 export async function readSplitsCache(activityId: number): Promise<ActivitySplit[] | null> {

@@ -72,6 +72,8 @@ export function SplitsChart({ splits, targetPace }: { splits: ActivitySplit[]; t
               color: c.ink,
               boxShadow: "0 8px 24px -8px rgb(0 0 0 / 0.18)",
             }}
+            labelStyle={{ color: c.ink }}
+            itemStyle={{ color: c.ink }}
             formatter={(value, _name, item) => {
               const paceSec = typeof value === "number" ? value : Number(value);
               const hr = (item?.payload as { hr?: number } | undefined)?.hr;

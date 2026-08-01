@@ -37,6 +37,11 @@ export function SeverityBadge({ severity }: { severity: InsightSeverity }) {
   );
 }
 
+/** Same visual language as SeverityBadge but with a caller-supplied label — for statuses Garmin names itself (HRV status, sleep score qualifier). */
+export function StatusChip({ severity, label }: { severity: InsightSeverity; label: string }) {
+  return <span className={`inline-flex items-center rounded-full px-2.5 py-1 text-xs font-semibold status-${severity}`}>{label}</span>;
+}
+
 function SeverityIcon({ severity }: { severity: InsightSeverity }) {
   if (severity === "good") {
     return (
