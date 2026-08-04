@@ -56,7 +56,8 @@ export function ActivityListRow({
   return (
     <motion.div
       initial={{ opacity: 0, y: 10 }}
-      animate={{ opacity: 1, y: 0 }}
+      whileInView={{ opacity: 1, y: 0 }}
+      viewport={{ once: true, margin: "-20px" }}
       whileTap={actual ? tapScaleSmall : undefined}
       transition={{ ...springSmooth, delay: Math.min(index * 0.04, 0.4) }}
     >

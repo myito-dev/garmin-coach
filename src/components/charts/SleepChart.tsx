@@ -7,12 +7,14 @@ import { BarXAxis } from "./bar-x-axis";
 import { ChartTooltip } from "./tooltip";
 import { CATEGORICAL } from "@/lib/chartColors";
 import { useIsDark } from "@/lib/useIsDark";
+import { useInViewOnce } from "@/lib/useInViewOnce";
 import { formatDate } from "@/lib/format";
 import { formatHoursMinutes } from "@/lib/wellness";
 import type { WellnessDay } from "@/lib/types";
 
 export function SleepChart({ days }: { days: WellnessDay[] }) {
   const isDark = useIsDark();
+  const { ref, inView } = useInViewOnce<HTMLDivElement>();
   const mode = isDark ? "dark" : "light";
   const deep = CATEGORICAL.violet[mode];
   const light = CATEGORICAL.blue[mode];
@@ -36,11 +38,18 @@ export function SleepChart({ days }: { days: WellnessDay[] }) {
   const avgH = Math.round((avgSeconds / 3600) * 10) / 10;
 
   return (
-    <div>
+    <div ref={ref}>
       <div className="mb-2 flex justify-end">
         <span className="tabular text-sm font-medium text-ink-secondary">Promedio {formatHoursMinutes(avgSeconds)}</span>
       </div>
-      <BarChart data={data as unknown as Record<string, unknown>[]} xDataKey="label" aspectRatio="16 / 8" stacked barGap={0.3}>
+      <BarChart
+        data={data as unknown as Record<string, unknown>[]}
+        xDataKey="label"
+        aspectRatio="16 / 8"
+        stacked
+        barGap={0.3}
+        status={inView ? "ready" : "loading"}
+      >
         <Grid horizontal strokeDasharray="4,4" highlightRowValues={[avgH]} />
         <Bar dataKey="deepH" fill={deep} lineCap={0} />
         <Bar dataKey="lightH" fill={light} lineCap={0} />

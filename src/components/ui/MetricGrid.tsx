@@ -9,7 +9,8 @@ export function MetricGrid({ metrics }: { metrics: { label: string; value: strin
         <motion.div
           key={m.label}
           initial={{ opacity: 0, y: 10 }}
-          animate={{ opacity: 1, y: 0 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true, margin: "-20px" }}
           transition={{ delay: i * 0.05 }}
           className="rounded-2xl border border-hairline bg-surface p-4"
         >

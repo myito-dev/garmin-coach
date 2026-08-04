@@ -8,6 +8,7 @@ import { ChartTooltip } from "./tooltip";
 import { CATEGORICAL, STATUS } from "@/lib/chartColors";
 import { formatPace, mpsToSecPerKm } from "@/lib/format";
 import { useIsDark } from "@/lib/useIsDark";
+import { useInViewOnce } from "@/lib/useInViewOnce";
 import type { ActivitySplit, PaceRange } from "@/lib/types";
 
 /**
@@ -18,6 +19,7 @@ import type { ActivitySplit, PaceRange } from "@/lib/types";
  */
 export function SplitsChart({ splits, targetPace }: { splits: ActivitySplit[]; targetPace?: PaceRange }) {
   const isDark = useIsDark();
+  const { ref, inView } = useInViewOnce<HTMLDivElement>();
   const mode = isDark ? "dark" : "light";
   const good = STATUS.good[mode];
   const serious = STATUS.serious[mode];
@@ -41,8 +43,15 @@ export function SplitsChart({ splits, targetPace }: { splits: ActivitySplit[]; t
   }));
 
   return (
-    <div className="w-full">
-      <BarChart data={data as unknown as Record<string, unknown>[]} xDataKey="km" aspectRatio="16 / 7" stacked barGap={0.3}>
+    <div className="w-full" ref={ref}>
+      <BarChart
+        data={data as unknown as Record<string, unknown>[]}
+        xDataKey="km"
+        aspectRatio="16 / 7"
+        stacked
+        barGap={0.3}
+        status={inView ? "ready" : "loading"}
+      >
         <Grid
           horizontal
           strokeDasharray="4,4"

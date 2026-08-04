@@ -5,6 +5,7 @@ import { Bar } from "./bar";
 import { Grid } from "./grid";
 import { BarXAxis } from "./bar-x-axis";
 import { ChartTooltip } from "./tooltip";
+import { useInViewOnce } from "@/lib/useInViewOnce";
 
 export interface WeeklyVolumePoint {
   week: number;
@@ -15,9 +16,16 @@ export interface WeeklyVolumePoint {
 }
 
 export function WeeklyVolumeChart({ data }: { data: WeeklyVolumePoint[] }) {
+  const { ref, inView } = useInViewOnce<HTMLDivElement>();
   return (
-    <div>
-      <BarChart data={data as unknown as Record<string, unknown>[]} xDataKey="label" aspectRatio="16 / 7" barGap={0.35}>
+    <div ref={ref}>
+      <BarChart
+        data={data as unknown as Record<string, unknown>[]}
+        xDataKey="label"
+        aspectRatio="16 / 7"
+        barGap={0.35}
+        status={inView ? "ready" : "loading"}
+      >
         <Grid horizontal strokeDasharray="4,4" />
         <Bar dataKey="plannedKm" fill="var(--chart-1)" />
         <Bar dataKey="actualKm" fill="var(--chart-2)" />

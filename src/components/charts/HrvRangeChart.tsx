@@ -9,6 +9,7 @@ import { STATUS } from "@/lib/chartColors";
 import { formatDate } from "@/lib/format";
 import { hrvStatusLabel, hrvStatusSeverity } from "@/lib/wellness";
 import { useIsDark } from "@/lib/useIsDark";
+import { useInViewOnce } from "@/lib/useInViewOnce";
 import type { WellnessDay } from "@/lib/types";
 
 /**
@@ -21,6 +22,7 @@ import type { WellnessDay } from "@/lib/types";
  */
 export function HrvRangeChart({ days }: { days: WellnessDay[] }) {
   const isDark = useIsDark();
+  const { ref, inView } = useInViewOnce<HTMLDivElement>();
   const mode = isDark ? "dark" : "light";
   const status = {
     good: STATUS.good[mode],
@@ -55,7 +57,7 @@ export function HrvRangeChart({ days }: { days: WellnessDay[] }) {
   const average = Math.round(values.reduce((s, v) => s + v, 0) / values.length);
 
   return (
-    <div>
+    <div ref={ref}>
       <div className="mb-2 flex items-center justify-between">
         <div className="flex flex-wrap items-center gap-x-4 gap-y-1 text-xs text-ink-secondary">
           <LegendDot color={status.good} label="Balanceado" />
@@ -65,7 +67,14 @@ export function HrvRangeChart({ days }: { days: WellnessDay[] }) {
         </div>
         <span className="tabular text-sm font-medium text-ink-secondary">Promedio {average} ms</span>
       </div>
-      <BarChart data={data as unknown as Record<string, unknown>[]} xDataKey="label" aspectRatio="16 / 7" stacked barGap={0.35}>
+      <BarChart
+        data={data as unknown as Record<string, unknown>[]}
+        xDataKey="label"
+        aspectRatio="16 / 7"
+        stacked
+        barGap={0.35}
+        status={inView ? "ready" : "loading"}
+      >
         <Grid horizontal strokeDasharray="4,4" highlightRowValues={[average]} />
         <Bar dataKey="valueGood" fill={status.good} />
         <Bar dataKey="valueWarning" fill={status.warning} />

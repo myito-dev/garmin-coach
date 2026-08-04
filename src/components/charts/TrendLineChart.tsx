@@ -6,6 +6,7 @@ import { Grid } from "./grid";
 import { XAxis } from "./x-axis";
 import { ChartTooltip } from "./tooltip";
 import { useIsDark } from "@/lib/useIsDark";
+import { useInViewOnce } from "@/lib/useInViewOnce";
 
 export interface TrendPoint {
   date: string;
@@ -24,6 +25,7 @@ export function TrendLineChart({
   decimals?: number;
 }) {
   const isDark = useIsDark();
+  const { ref, inView } = useInViewOnce<HTMLDivElement>();
   const lineColor = isDark ? color.dark : color.light;
 
   const data = points.map((p) => ({ date: new Date(`${p.date}T00:00:00`), value: p.value }));
@@ -34,14 +36,19 @@ export function TrendLineChart({
   const averageRounded = Math.round(average * 10 ** decimals) / 10 ** decimals;
 
   return (
-    <div>
+    <div ref={ref}>
       <div className="mb-2 flex justify-end">
         <span className="tabular text-sm font-medium text-ink-secondary">
           Promedio {average.toFixed(decimals)}
           {unit}
         </span>
       </div>
-      <LineChart data={data as unknown as Record<string, unknown>[]} xDataKey="date" aspectRatio="16 / 7">
+      <LineChart
+        data={data as unknown as Record<string, unknown>[]}
+        xDataKey="date"
+        aspectRatio="16 / 7"
+        status={inView ? "ready" : "loading"}
+      >
         <Grid horizontal strokeDasharray="4,4" highlightRowValues={[averageRounded]} />
         <Line dataKey="value" stroke={lineColor} showMarkers />
         <XAxis numTicks={6} />
