@@ -5,7 +5,7 @@ import { GlassCard } from "@/components/ui/GlassCard";
 import { formatDate, formatDistance, formatPace, mpsToSecPerKm, todayIso } from "@/lib/format";
 import { analyzeActivity } from "@/lib/insights";
 import { isRunningActivity, matchActivitiesToPlan } from "@/lib/planMatch";
-import { readActivitiesCache } from "@/lib/store";
+import { readActivitiesCache, readRouteCacheMany, readSplitsCacheMany } from "@/lib/store";
 
 export const metadata = {
   title: "Entrenamientos · Garmin Coach",
@@ -21,6 +21,9 @@ export default async function EntrenamientosPage() {
 
   const past = matches.filter((m) => m.planned.date <= today).sort((a, b) => (a.planned.date < b.planned.date ? 1 : -1));
   const upcoming = matches.filter((m) => m.planned.date > today).sort((a, b) => (a.planned.date < b.planned.date ? -1 : 1)).slice(0, 4);
+
+  const pastIds = past.filter((m) => m.actual).map((m) => m.actual!.activityId);
+  const [pastRoutes, pastSplits] = await Promise.all([readRouteCacheMany(pastIds), readSplitsCacheMany(pastIds)]);
 
   const matchedIds = new Set(matches.filter((m) => m.actual).map((m) => m.actual!.activityId));
   const extras = cache.activities
@@ -65,6 +68,8 @@ export default async function EntrenamientosPage() {
                   score={analysis?.adherence.score ?? null}
                   index={i}
                   dayOffset={m.dayOffset}
+                  route={m.actual ? (pastRoutes.get(m.actual.activityId) ?? null) : null}
+                  splits={m.actual ? (pastSplits.get(m.actual.activityId) ?? null) : null}
                 />
               );
             })}

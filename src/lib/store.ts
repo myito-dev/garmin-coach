@@ -85,8 +85,37 @@ export async function writeSplitsCache(activityId: number, splits: ActivitySplit
   await getRedis().set(`${SPLITS_KEY_PREFIX}${activityId}`, splits);
 }
 
+/** Batched, cache-only counterpart to readRouteCacheMany — see its comment. */
+export async function readSplitsCacheMany(activityIds: number[]): Promise<Map<number, ActivitySplit[]>> {
+  if (activityIds.length === 0) return new Map();
+  const keys = activityIds.map((id) => `${SPLITS_KEY_PREFIX}${id}`);
+  const values = await getRedis().mget<(ActivitySplit[] | null)[]>(...keys);
+  const map = new Map<number, ActivitySplit[]>();
+  activityIds.forEach((id, i) => {
+    const splits = values[i];
+    if (splits && splits.length > 0) map.set(id, splits);
+  });
+  return map;
+}
+
 export async function readRouteCache(activityId: number): Promise<RoutePoint[] | null> {
   return (await getRedis().get<RoutePoint[]>(`${ROUTE_KEY_PREFIX}${activityId}`)) ?? null;
+}
+
+/** Batched, cache-only (no live Garmin fallback) — for list pages showing many
+ * rows, where fetching each activity's route individually on a cache miss
+ * would mean N undocumented-API calls per page load. Rows with no cached
+ * route are simply omitted from the returned map. */
+export async function readRouteCacheMany(activityIds: number[]): Promise<Map<number, RoutePoint[]>> {
+  if (activityIds.length === 0) return new Map();
+  const keys = activityIds.map((id) => `${ROUTE_KEY_PREFIX}${id}`);
+  const values = await getRedis().mget<(RoutePoint[] | null)[]>(...keys);
+  const map = new Map<number, RoutePoint[]>();
+  activityIds.forEach((id, i) => {
+    const points = values[i];
+    if (points && points.length > 0) map.set(id, points);
+  });
+  return map;
 }
 
 // A route never changes once recorded — this TTL isn't about staleness, it's

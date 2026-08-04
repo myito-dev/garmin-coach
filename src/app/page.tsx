@@ -16,7 +16,7 @@ import { formatDateLong, formatPaceRange, daysUntil, paceLabelToSeconds, todayIs
 import { analyzeActivity } from "@/lib/insights";
 import { computeLiveDiagnosis } from "@/lib/diagnosis";
 import { actualKmForWeek, matchActivitiesToPlan } from "@/lib/planMatch";
-import { readActivitiesCache, readWellnessCache } from "@/lib/store";
+import { readActivitiesCache, readWellnessCache, readRouteCacheMany, readSplitsCacheMany } from "@/lib/store";
 import { getActivityRoute } from "@/lib/route";
 import type { GarminActivitySummary, RoutePoint } from "@/lib/types";
 
@@ -53,6 +53,8 @@ export default async function DashboardPage() {
     .filter((m) => m.actual)
     .sort((a, b) => (a.planned.date < b.planned.date ? 1 : -1))
     .slice(0, 5);
+  const recentIds = recentMatched.map((m) => m.actual!.activityId);
+  const [recentRoutes, recentSplits] = await Promise.all([readRouteCacheMany(recentIds), readSplitsCacheMany(recentIds)]);
 
   const live = computeLiveDiagnosis(cache.activities);
   // A live-detected PR only replaces the seed if it's actually faster — otherwise the
@@ -297,6 +299,8 @@ export default async function DashboardPage() {
                   score={analysis?.adherence.score ?? null}
                   index={i}
                   dayOffset={m.dayOffset}
+                  route={m.actual ? (recentRoutes.get(m.actual.activityId) ?? null) : null}
+                  splits={m.actual ? (recentSplits.get(m.actual.activityId) ?? null) : null}
                 />
               );
             })}

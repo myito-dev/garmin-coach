@@ -4,8 +4,12 @@ import { motion } from "motion/react";
 import Link from "next/link";
 import { formatDate, formatDistance, formatPace, mpsToSecPerKm } from "@/lib/format";
 import { springSmooth, tapScaleSmall } from "@/lib/motion";
-import type { GarminActivitySummary, PlannedSession } from "@/lib/types";
+import { useIsDark } from "@/lib/useIsDark";
+import { SESSION_META } from "@/lib/sessionMeta";
+import type { ActivitySplit, GarminActivitySummary, PlannedSession, RoutePoint } from "@/lib/types";
 import { KindBadge } from "./ui/Badges";
+import { RouteThumbnail } from "./RouteThumbnail";
+import { ActivitySparkline } from "./ActivitySparkline";
 
 export function ActivityListRow({
   planned,
@@ -13,16 +17,25 @@ export function ActivityListRow({
   score,
   index,
   dayOffset = null,
+  route = null,
+  splits = null,
 }: {
   planned: PlannedSession;
   actual: GarminActivitySummary | null;
   score: number | null;
   index: number;
   dayOffset?: number | null;
+  route?: RoutePoint[] | null;
+  splits?: ActivitySplit[] | null;
 }) {
+  const isDark = useIsDark();
+  const kindColor = isDark ? SESSION_META[planned.kind].color.dark : SESSION_META[planned.kind].color.light;
+  const paceValues = actual && splits ? splits.filter((s) => s.distanceMeters >= 200).map((s) => mpsToSecPerKm(s.averageSpeedMps)) : [];
+
   const content = (
     <div className={`card flex flex-wrap items-center justify-between gap-3 p-4 ${actual ? "card-interactive" : ""}`}>
       <div className="flex items-center gap-3">
+        <RouteThumbnail kind={planned.kind} points={actual ? route : null} />
         <div className="flex w-12 shrink-0 flex-col items-center rounded-xl bg-page py-1.5">
           <span className="text-[10px] font-semibold uppercase text-ink-muted">{planned.day}</span>
           <span className="text-sm font-semibold">{formatDate(planned.date).split(" ")[0]}</span>
@@ -44,12 +57,15 @@ export function ActivityListRow({
           )}
         </div>
       </div>
-      {actual && score !== null && (
-        <div className="flex items-center gap-2">
-          <ScoreDot score={score} />
-          <span className="tabular text-sm font-semibold">{score}</span>
-        </div>
-      )}
+      <div className="flex items-center gap-3">
+        {paceValues.length >= 2 && <ActivitySparkline values={paceValues} color={kindColor} />}
+        {actual && score !== null && (
+          <div className="flex items-center gap-2">
+            <ScoreDot score={score} />
+            <span className="tabular text-sm font-semibold">{score}</span>
+          </div>
+        )}
+      </div>
     </div>
   );
 
