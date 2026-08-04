@@ -98,12 +98,14 @@ export default async function DashboardPage() {
     <div className="mx-auto max-w-6xl space-y-6 px-4 py-6 sm:px-6 sm:py-10">
       {/* Hero */}
       <GlassCard className="hero-glass relative overflow-hidden !p-0">
-        {heroRoute ? <RouteGlow points={heroRoute} /> : <FloatingPaths />}
-        <div
-          aria-hidden
-          className="pointer-events-none absolute -right-16 -top-16 h-64 w-64 rounded-full opacity-[0.20] blur-3xl"
-          style={{ background: "radial-gradient(circle, var(--chart-2), transparent 70%)" }}
-        />
+        <div className="pointer-events-none absolute inset-y-0 right-0 w-full sm:w-[68%]">
+          {heroRoute ? <RouteGlow points={heroRoute} /> : <FloatingPaths />}
+          <div
+            aria-hidden
+            className="absolute inset-0"
+            style={{ background: "linear-gradient(115deg, var(--page) 0%, transparent 32%), radial-gradient(circle at 72% 38%, var(--chart-2), transparent 62%)" }}
+          />
+        </div>
         <div
           aria-hidden
           className="pointer-events-none absolute -bottom-24 -left-16 h-72 w-72 rounded-full opacity-[0.16] blur-3xl"
@@ -126,61 +128,82 @@ export default async function DashboardPage() {
               </div>
             )}
           </div>
-          <CountdownRing daysLeft={daysLeft} totalDays={planSpanDays} />
+          <div className="rounded-full border border-hairline bg-surface/70 p-2 backdrop-blur-md">
+            <CountdownRing daysLeft={daysLeft} totalDays={planSpanDays} />
+          </div>
         </div>
-        <div className="relative z-10 grid grid-cols-2 gap-3 px-5 pb-6 sm:grid-cols-4 sm:px-10 sm:pb-8">
-          <StatPill
-            index={0}
-            color="blue"
-            icon={
-              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
-                <path d="M13 2 3 14h7l-1 8 11-14h-7l1-6z" />
-              </svg>
-            }
-            label="Mejor 10K"
-            value={diag.best10k.timeLabel}
-            sub={diag.best10k.paceLabel}
-          />
-          <StatPill
-            index={1}
-            color="lime"
-            icon={
-              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
-                <circle cx="12" cy="12" r="9" />
-                <circle cx="12" cy="12" r="4.5" />
-                <circle cx="12" cy="12" r="0.5" fill="currentColor" />
-              </svg>
-            }
-            label="Mejor 5K"
-            value={diag.best5k.timeLabel}
-            sub={diag.best5k.paceLabel}
-          />
-          <StatPill
-            index={2}
-            color="green"
-            icon={
-              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
-                <circle cx="12" cy="8" r="5" />
-                <path d="M8.5 12.5 7 22l5-3 5 3-1.5-9.5" />
-              </svg>
-            }
-            label="Mejor medio"
-            value={diag.bestHalf.timeLabel}
-            sub={diag.bestHalf.paceLabel}
-          />
-          <StatPill
-            index={3}
-            color="orange"
-            icon={
-              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
-                <path d="M3 17l6-6 4 4 8-8" />
-                <path d="M15 7h6v6" />
-              </svg>
-            }
-            label="Predicción Riegel"
-            value={diag.riegelPrediction}
-            sub="a partir del 10K"
-          />
+        <div className="relative z-10 px-5 pb-6 sm:px-10 sm:pb-8">
+          <div className="flex items-stretch divide-x divide-hairline rounded-2xl border border-hairline bg-surface/70 backdrop-blur-md">
+            <div className="grid flex-1 grid-cols-2 gap-x-2 gap-y-3 p-3 sm:grid-cols-4 sm:gap-3 sm:p-4">
+              <StatPill
+                bare
+                index={0}
+                color="blue"
+                icon={
+                  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+                    <path d="M13 2 3 14h7l-1 8 11-14h-7l1-6z" />
+                  </svg>
+                }
+                label="Mejor 10K"
+                value={diag.best10k.timeLabel}
+                sub={diag.best10k.paceLabel}
+              />
+              <StatPill
+                bare
+                index={1}
+                color="lime"
+                icon={
+                  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+                    <circle cx="12" cy="12" r="9" />
+                    <circle cx="12" cy="12" r="4.5" />
+                    <circle cx="12" cy="12" r="0.5" fill="currentColor" />
+                  </svg>
+                }
+                label="Mejor 5K"
+                value={diag.best5k.timeLabel}
+                sub={diag.best5k.paceLabel}
+              />
+              <StatPill
+                bare
+                index={2}
+                color="green"
+                icon={
+                  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+                    <circle cx="12" cy="8" r="5" />
+                    <path d="M8.5 12.5 7 22l5-3 5 3-1.5-9.5" />
+                  </svg>
+                }
+                label="Mejor medio"
+                value={diag.bestHalf.timeLabel}
+                sub={diag.bestHalf.paceLabel}
+              />
+              <StatPill
+                bare
+                index={3}
+                color="orange"
+                icon={
+                  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+                    <path d="M3 17l6-6 4 4 8-8" />
+                    <path d="M15 7h6v6" />
+                  </svg>
+                }
+                label="Predicción Riegel"
+                value={diag.riegelPrediction}
+                sub="a partir del 10K"
+              />
+            </div>
+            <Link
+              href="/entrenamientos"
+              aria-label="Ver entrenamientos"
+              className="hidden shrink-0 items-center justify-center px-4 text-ink-muted transition-colors hover:text-accent sm:flex"
+            >
+              <span className="flex h-9 w-9 items-center justify-center rounded-full bg-page">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+                  <path d="M5 12h14M13 6l6 6-6 6" />
+                </svg>
+              </span>
+            </Link>
+          </div>
         </div>
         <Marquee items={marqueeItems} />
       </GlassCard>
