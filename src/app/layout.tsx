@@ -60,9 +60,9 @@ export default function RootLayout({
       <head>
         <script dangerouslySetInnerHTML={{ __html: NO_FLASH_THEME_SCRIPT }} />
       </head>
-      <body className="min-h-full flex flex-col bg-page text-ink">
+      <body className="min-h-full flex flex-col sm:flex-row bg-page text-ink">
         <NavBar />
-        <main className="flex-1 pb-24 sm:pb-0">{children}</main>
+        <main className="min-w-0 flex-1 pb-24 sm:pb-0">{children}</main>
       </body>
     </html>
   );

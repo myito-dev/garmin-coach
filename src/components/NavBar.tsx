@@ -32,35 +32,42 @@ export function NavBar() {
 
   return (
     <>
-      <header className="sticky top-0 z-40 hidden border-b border-hairline glass sm:block">
-        <div className="mx-auto flex max-w-6xl items-center justify-between px-6 py-3">
-          <Logo />
-          <nav className="flex items-center gap-1 rounded-full border border-hairline bg-surface p-1">
-            {LINKS.map((link) => {
-              const active = pathname === link.href;
-              return (
-                <Link
-                  key={link.href}
-                  href={link.href}
-                  className="relative rounded-full px-4 py-1.5 text-sm font-medium transition-colors"
-                >
-                  {active && (
-                    <motion.span
-                      layoutId="nav-pill"
-                      className="absolute inset-0 rounded-full bg-accent"
-                      transition={springSnappy}
-                    />
-                  )}
-                  <span className={`relative z-10 ${active ? "text-accent-ink" : "text-ink-secondary"}`}>
-                    {link.label}
-                  </span>
-                </Link>
-              );
-            })}
-          </nav>
-          <div className="w-8" aria-hidden="true" />
-        </div>
-      </header>
+      {/* Desktop icon sidebar */}
+      <aside className="sticky top-0 z-40 hidden h-screen w-16 shrink-0 flex-col items-center gap-1 border-r border-sidebar-border bg-sidebar py-4 sm:flex">
+        <Link
+          href="/"
+          aria-label="Garmin Coach — Panel"
+          className="brand-mark mb-4 flex h-9 w-9 shrink-0 items-center justify-center rounded-xl text-white"
+        >
+          <ActivityIcon className="h-4 w-4" aria-hidden="true" />
+        </Link>
+        <nav className="flex flex-1 flex-col items-center gap-1">
+          {LINKS.map((link) => {
+            const active = pathname === link.href;
+            const Icon = link.icon;
+            return (
+              <Link
+                key={link.href}
+                href={link.href}
+                aria-label={link.label}
+                className="relative flex h-11 w-11 items-center justify-center rounded-xl"
+              >
+                {active && (
+                  <motion.span
+                    layoutId="nav-pill-sidebar"
+                    className="absolute inset-0 rounded-xl bg-sidebar-accent"
+                    transition={springSnappy}
+                  />
+                )}
+                <Icon
+                  className={`relative z-10 h-5 w-5 ${active ? "text-sidebar-primary" : "text-sidebar-foreground/55"}`}
+                  aria-hidden="true"
+                />
+              </Link>
+            );
+          })}
+        </nav>
+      </aside>
 
       {/* Mobile top bar */}
       <header className="sticky top-0 z-40 flex items-center justify-between border-b border-hairline glass px-4 py-3 sm:hidden">
