@@ -65,10 +65,6 @@ export function daysUntil(iso: string): number {
   return Math.round((target - today) / (1000 * 60 * 60 * 24));
 }
 
-export function isSameIsoDate(a: string, b: string): boolean {
-  return a === b;
-}
-
 export function addDaysIso(iso: string, days: number): string {
   const d = new Date(iso + "T00:00:00");
   d.setDate(d.getDate() + days);

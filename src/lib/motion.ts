@@ -1,4 +1,4 @@
-import type { Transition, Variants } from "motion/react";
+import type { Transition } from "motion/react";
 
 // Motion tokens follow Emil Kowalski's (animations.dev) and Apple's (WWDC "Designing
 // Fluid Interfaces") documented defaults: springs parameterized by duration + bounce
@@ -23,16 +23,3 @@ export const easeOutStrong = [0.23, 1, 0.32, 1] as const;
 /** Apple: "respond on pointer-down, be subtle." Scale range 0.95–0.98 per Kowalski. */
 export const tapScale = { scale: 0.97 };
 export const tapScaleSmall = { scale: 0.95 };
-
-export const fadeUp: Variants = {
-  hidden: { opacity: 0, y: 14 },
-  show: { opacity: 1, y: 0, transition: springSmooth },
-};
-
-/** Wrap a list's parent with `variants={staggerContainer}`, each child with `variants={fadeUp}`. */
-export const staggerContainer: Variants = {
-  hidden: {},
-  show: {
-    transition: { staggerChildren: 0.05, delayChildren: 0.04 },
-  },
-};

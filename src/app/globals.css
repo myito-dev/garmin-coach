@@ -365,23 +365,6 @@ h3 {
   color: var(--spotlight-chip-ink);
 }
 
-/* Subtle organic line-art background, echoing a topographic map. Decorative, low-opacity, never on scrolling content. */
-.texture-topo {
-  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='400' height='400' viewBox='0 0 400 400'%3E%3Cg fill='none' stroke='%23000' stroke-width='1'%3E%3Cpath d='M-20 60 Q 100 10, 200 60 T 420 60'/%3E%3Cpath d='M-20 140 Q 100 90, 200 140 T 420 140'/%3E%3Cpath d='M-20 220 Q 100 170, 200 220 T 420 220'/%3E%3Cpath d='M-20 300 Q 100 250, 200 300 T 420 300'/%3E%3Cpath d='M-20 380 Q 100 330, 200 380 T 420 380'/%3E%3C/g%3E%3C/svg%3E");
-  background-size: 480px 480px;
-  opacity: 0.05;
-}
-@media (prefers-color-scheme: dark) {
-  :root:not([data-theme="light"]) .texture-topo {
-    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='400' height='400' viewBox='0 0 400 400'%3E%3Cg fill='none' stroke='%23fff' stroke-width='1'%3E%3Cpath d='M-20 60 Q 100 10, 200 60 T 420 60'/%3E%3Cpath d='M-20 140 Q 100 90, 200 140 T 420 140'/%3E%3Cpath d='M-20 220 Q 100 170, 200 220 T 420 220'/%3E%3Cpath d='M-20 300 Q 100 250, 200 300 T 420 300'/%3E%3Cpath d='M-20 380 Q 100 330, 200 380 T 420 380'/%3E%3C/g%3E%3C/svg%3E");
-    opacity: 0.06;
-  }
-}
-:root[data-theme="dark"] .texture-topo {
-  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='400' height='400' viewBox='0 0 400 400'%3E%3Cg fill='none' stroke='%23fff' stroke-width='1'%3E%3Cpath d='M-20 60 Q 100 10, 200 60 T 420 60'/%3E%3Cpath d='M-20 140 Q 100 90, 200 140 T 420 140'/%3E%3Cpath d='M-20 220 Q 100 170, 200 220 T 420 220'/%3E%3Cpath d='M-20 300 Q 100 250, 200 300 T 420 300'/%3E%3Cpath d='M-20 380 Q 100 330, 200 380 T 420 380'/%3E%3C/g%3E%3C/svg%3E");
-  opacity: 0.06;
-}
-
 .tabular {
   font-variant-numeric: tabular-nums;
 }
