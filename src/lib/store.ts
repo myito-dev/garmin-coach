@@ -6,7 +6,10 @@ const KEY_TOKEN = "garmin:token";
 const KEY_CACHE = "activities:cache";
 const KEY_WELLNESS_CACHE = "wellness:cache";
 const SPLITS_KEY_PREFIX = "splits:";
-const ROUTE_KEY_PREFIX = "route:";
+// v2: route data now sourced from geoPolylineDTO instead of the unordered
+// activityDetailMetrics fallback — versioned so already-cached bad routes
+// (from before the fix) are naturally orphaned instead of served stale.
+const ROUTE_KEY_PREFIX = "route:v2:";
 
 interface ActivitiesCache {
   lastSyncedAt: string | null;
@@ -86,6 +89,10 @@ export async function readRouteCache(activityId: number): Promise<RoutePoint[] |
   return (await getRedis().get<RoutePoint[]>(`${ROUTE_KEY_PREFIX}${activityId}`)) ?? null;
 }
 
+// A route never changes once recorded — this TTL isn't about staleness, it's
+// a safety net so a future parsing bug doesn't require another manual key-prefix bump.
+const ROUTE_CACHE_TTL_SECONDS = 60 * 60 * 24 * 90;
+
 export async function writeRouteCache(activityId: number, points: RoutePoint[]): Promise<void> {
-  await getRedis().set(`${ROUTE_KEY_PREFIX}${activityId}`, points);
+  await getRedis().set(`${ROUTE_KEY_PREFIX}${activityId}`, points, { ex: ROUTE_CACHE_TTL_SECONDS });
 }

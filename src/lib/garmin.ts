@@ -105,35 +105,60 @@ interface RawMetricDescriptor {
   key: string;
 }
 
+interface RawPolylinePoint {
+  lat?: number;
+  lon?: number;
+  time?: number;
+  valid?: boolean;
+}
+
 interface RawActivityDetails {
   metricDescriptors?: RawMetricDescriptor[];
   activityDetailMetrics?: { metrics: (number | null)[] }[];
+  geoPolylineDTO?: { polyline?: RawPolylinePoint[] };
 }
 
 /**
- * GPS route for an activity, decimated by Garmin to a small polyline. Same
- * "Custom requests" undocumented-endpoint pattern as splits/HRV baseline —
- * this is the same endpoint Garmin Connect's own activity map uses.
+ * GPS route for an activity. Prefers `geoPolylineDTO.polyline` — Garmin's
+ * dedicated, chronologically-ordered map geometry (governed by
+ * `maxPolylineSize`, confirmed via a live response to include `time` in
+ * strictly non-decreasing order). Falls back to `activityDetailMetrics`
+ * (chart-decimated via `maxChartSize`, no ordering guarantee — hence the
+ * defensive sort by its own timestamp metric) only if the polyline is
+ * missing, e.g. very old or GPS-less activities.
  */
 export async function fetchActivityRoute(activityId: number): Promise<RoutePoint[]> {
   const client = await getAuthenticatedClient();
   const url = `https://connectapi.garmin.com/activity-service/activity/${activityId}/details?maxChartSize=1&maxPolylineSize=300`;
   const res = await client.get<RawActivityDetails>(url);
+
+  const polyline = res?.geoPolylineDTO?.polyline ?? [];
+  if (polyline.length > 0) {
+    return polyline
+      .filter((p): p is RawPolylinePoint & { lat: number; lon: number } =>
+        typeof p.lat === "number" && typeof p.lon === "number" && p.valid !== false && (p.lat !== 0 || p.lon !== 0),
+      )
+      .sort((a, b) => (a.time ?? 0) - (b.time ?? 0))
+      .map((p) => ({ lat: p.lat, lon: p.lon }));
+  }
+
   const descriptors = res?.metricDescriptors ?? [];
   const latIndex = descriptors.find((d) => d.key === "directLatitude")?.metricsIndex;
   const lonIndex = descriptors.find((d) => d.key === "directLongitude")?.metricsIndex;
   if (latIndex === undefined || lonIndex === undefined) return [];
+  const timeIndex = descriptors.find((d) => d.key === "sumElapsedDuration" || d.key === "directTimestamp")?.metricsIndex;
 
   const rows = res?.activityDetailMetrics ?? [];
-  const points: RoutePoint[] = [];
+  const points: (RoutePoint & { t: number })[] = [];
   for (const row of rows) {
     const lat = row.metrics[latIndex];
     const lon = row.metrics[lonIndex];
+    const t = timeIndex !== undefined ? row.metrics[timeIndex] : null;
     if (typeof lat === "number" && typeof lon === "number" && (lat !== 0 || lon !== 0)) {
-      points.push({ lat, lon });
+      points.push({ lat, lon, t: typeof t === "number" ? t : points.length });
     }
   }
-  return points;
+  return points.sort((a, b) => a.t - b.t).map(({ lat, lon }) => ({ lat, lon }));
 }
 
 interface RawSleepDTO {
