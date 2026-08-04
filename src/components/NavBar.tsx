@@ -32,50 +32,57 @@ export function NavBar() {
 
   return (
     <>
-      {/* Desktop icon sidebar */}
-      <aside className="sticky top-0 z-40 hidden h-screen w-16 shrink-0 flex-col items-center gap-1 border-r border-sidebar-border bg-sidebar py-4 sm:flex">
-        <Link
-          href="/"
-          aria-label="Garmin Coach — Panel"
-          className="brand-mark mb-4 flex h-9 w-9 shrink-0 items-center justify-center rounded-xl text-white"
-        >
-          <ActivityIcon className="h-4 w-4" aria-hidden="true" />
-        </Link>
-        <nav className="flex flex-1 flex-col items-center gap-1">
-          {LINKS.map((link) => {
-            const active = pathname === link.href;
-            const Icon = link.icon;
-            return (
-              <Link
-                key={link.href}
-                href={link.href}
-                aria-label={link.label}
-                className="relative flex h-11 w-11 items-center justify-center rounded-xl"
-              >
-                {active && (
-                  <motion.span
-                    layoutId="nav-pill-sidebar"
-                    className="absolute inset-0 rounded-xl bg-sidebar-accent"
-                    transition={springSnappy}
+      {/* Desktop icon sidebar — a floating glass rail, inset from the screen
+          edge, rather than a flush full-bleed bar. */}
+      <aside className="sticky top-0 z-40 hidden h-screen w-[88px] shrink-0 items-stretch p-3 sm:flex">
+        <div className="glass flex w-full flex-col items-center gap-1 rounded-[28px] border border-sidebar-border py-4">
+          <Link
+            href="/"
+            aria-label="Garmin Coach — Panel"
+            className="brand-mark mb-4 flex h-9 w-9 shrink-0 items-center justify-center rounded-xl text-white"
+          >
+            <ActivityIcon className="h-4 w-4" aria-hidden="true" />
+          </Link>
+          <nav className="flex flex-1 flex-col items-center gap-1">
+            {LINKS.map((link) => {
+              const active = pathname === link.href;
+              const Icon = link.icon;
+              return (
+                <Link
+                  key={link.href}
+                  href={link.href}
+                  aria-label={link.label}
+                  className="relative flex h-11 w-11 items-center justify-center rounded-2xl"
+                >
+                  {active && (
+                    <motion.span
+                      layoutId="nav-pill-sidebar"
+                      className="absolute inset-0 rounded-2xl bg-sidebar-accent"
+                      transition={springSnappy}
+                    />
+                  )}
+                  <Icon
+                    className={`relative z-10 h-5 w-5 ${active ? "text-sidebar-primary" : "text-sidebar-foreground/55"}`}
+                    aria-hidden="true"
                   />
-                )}
-                <Icon
-                  className={`relative z-10 h-5 w-5 ${active ? "text-sidebar-primary" : "text-sidebar-foreground/55"}`}
-                  aria-hidden="true"
-                />
-              </Link>
-            );
-          })}
-        </nav>
+                </Link>
+              );
+            })}
+          </nav>
+        </div>
       </aside>
 
       {/* Mobile top bar */}
-      <header className="sticky top-0 z-40 flex items-center justify-between border-b border-hairline glass px-4 py-3 sm:hidden">
+      <header className="sticky top-0 z-40 flex items-center justify-between border-b border-hairline glass px-4 py-3 [transform:translateZ(0)] sm:hidden">
         <Logo compact />
       </header>
 
-      {/* Mobile bottom tab bar */}
-      <nav className="fixed bottom-0 left-0 right-0 z-40 border-t border-hairline glass px-2 pb-[env(safe-area-inset-bottom)] sm:hidden">
+      {/* Mobile bottom tab bar. `position: fixed` combined with `backdrop-filter`
+          on the same element is a known WebKit bug — without its own compositor
+          layer, the bar can detach from the viewport and drift mid-scroll once
+          there are other blurred (glass) elements on the page. translateZ(0)
+          forces it onto its own layer, isolating it from that. */}
+      <nav className="fixed bottom-0 left-0 right-0 z-40 border-t border-hairline glass px-2 pb-[env(safe-area-inset-bottom)] [transform:translateZ(0)] sm:hidden">
         <div className="flex items-center justify-around py-1.5">
           {LINKS.map((link) => {
             const active = pathname === link.href;
