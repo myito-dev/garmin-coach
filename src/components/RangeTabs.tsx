@@ -1,6 +1,6 @@
 "use client";
 
-import { motion } from "framer-motion";
+import { motion } from "motion/react";
 import { springSnappy } from "@/lib/motion";
 
 export type WellnessRange = "7d" | "1m" | "3m" | "6m" | "1y";

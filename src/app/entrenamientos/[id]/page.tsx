@@ -8,10 +8,12 @@ import { PaceBand } from "@/components/charts/PaceBand";
 import { HRZoneBar } from "@/components/charts/HRZoneBar";
 import { SplitsChart } from "@/components/charts/SplitsChart";
 import { SplitsTable } from "@/components/SplitsTable";
+import { RouteMapLoader } from "@/components/RouteMapLoader";
 import { formatDateLong, formatDistance, formatDuration } from "@/lib/format";
 import { analyzeActivity, isPaceGradingUnreliable } from "@/lib/insights";
 import { matchActivitiesToPlan } from "@/lib/planMatch";
 import { getActivitySplits } from "@/lib/splits";
+import { getActivityRoute } from "@/lib/route";
 import { readActivitiesCache } from "@/lib/store";
 
 // Reads live Redis state (synced activities + splits) — never prerender this at build time.
@@ -29,7 +31,7 @@ export default async function ActivityDetailPage({ params }: { params: Promise<{
   const match = matches.find((m) => m.actual?.activityId === activityId);
   const planned = match?.planned ?? null;
 
-  const splits = await getActivitySplits(activityId);
+  const [splits, route] = await Promise.all([getActivitySplits(activityId), getActivityRoute(activityId)]);
   const analysis = analyzeActivity(activity, planned, splits);
   const paceGradingUnreliable = planned ? isPaceGradingUnreliable(planned.kind) : false;
 
@@ -75,6 +77,12 @@ export default async function ActivityDetailPage({ params }: { params: Promise<{
         <h2 className="mb-4 text-lg font-semibold">Resumen</h2>
         <MetricGrid metrics={metrics} />
       </GlassCard>
+
+      {route && route.length > 1 && (
+        <GlassCard className="!p-0 overflow-hidden">
+          <RouteMapLoader points={route} />
+        </GlassCard>
+      )}
 
       {planned?.pace && !paceGradingUnreliable && (
         <GlassCard>

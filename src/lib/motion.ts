@@ -1,4 +1,4 @@
-import type { Transition, Variants } from "framer-motion";
+import type { Transition, Variants } from "motion/react";
 
 // Motion tokens follow Emil Kowalski's (animations.dev) and Apple's (WWDC "Designing
 // Fluid Interfaces") documented defaults: springs parameterized by duration + bounce

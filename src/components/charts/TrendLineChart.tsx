@@ -1,8 +1,10 @@
 "use client";
 
-import { CartesianGrid, Line, LineChart, ReferenceLine, ResponsiveContainer, Tooltip, XAxis, YAxis } from "recharts";
-import { CHART } from "@/lib/chartColors";
-import { formatDate } from "@/lib/format";
+import { LineChart } from "./line-chart";
+import { Line } from "./line";
+import { Grid } from "./grid";
+import { XAxis } from "./x-axis";
+import { ChartTooltip } from "./tooltip";
 import { useIsDark } from "@/lib/useIsDark";
 
 export interface TrendPoint {
@@ -14,24 +16,22 @@ export function TrendLineChart({
   points,
   color,
   unit = "",
-  domain,
   decimals = 0,
 }: {
   points: TrendPoint[];
   color: { light: string; dark: string };
   unit?: string;
-  domain?: [number, number];
   decimals?: number;
 }) {
   const isDark = useIsDark();
-  const c = isDark ? CHART.dark : CHART.light;
   const lineColor = isDark ? color.dark : color.light;
 
-  const data = points.map((p) => ({ ...p, label: formatDate(p.date) }));
+  const data = points.map((p) => ({ date: new Date(`${p.date}T00:00:00`), value: p.value }));
 
   if (data.length === 0) return <p className="text-sm text-ink-secondary">Todavía no hay suficientes datos sincronizados.</p>;
 
   const average = data.reduce((s, p) => s + p.value, 0) / data.length;
+  const averageRounded = Math.round(average * 10 ** decimals) / 10 ** decimals;
 
   return (
     <div>
@@ -41,46 +41,12 @@ export function TrendLineChart({
           {unit}
         </span>
       </div>
-      <div className="h-56 w-full">
-        <ResponsiveContainer width="100%" height="100%">
-          <LineChart data={data} margin={{ top: 8, right: 8, left: 0, bottom: 0 }}>
-            <CartesianGrid vertical={false} stroke={c.gridline} strokeDasharray="3 3" />
-            <XAxis dataKey="label" tick={{ fill: c.muted, fontSize: 11 }} axisLine={{ stroke: c.baseline }} tickLine={false} interval={data.length > 10 ? Math.ceil(data.length / 8) : 0} />
-            <YAxis
-              domain={domain ?? ["auto", "auto"]}
-              tick={{ fill: c.muted, fontSize: 11 }}
-              axisLine={false}
-              tickLine={false}
-              width={34}
-            />
-            <ReferenceLine y={average} stroke={c.baseline} strokeDasharray="4 4" />
-            <Tooltip
-              cursor={{ stroke: c.baseline, strokeDasharray: "3 3" }}
-              contentStyle={{
-                background: c.surface,
-                border: `1px solid ${c.gridline}`,
-                borderRadius: 14,
-                fontSize: 12,
-                color: c.ink,
-                boxShadow: "0 8px 24px -8px rgb(0 0 0 / 0.18)",
-              }}
-              labelStyle={{ color: c.ink }}
-              itemStyle={{ color: c.ink }}
-              formatter={(value) => [`${value}${unit}`, ""]}
-            />
-            <Line
-              type="monotone"
-              dataKey="value"
-              stroke={lineColor}
-              strokeWidth={2.5}
-              dot={{ r: 3, fill: lineColor, strokeWidth: 0 }}
-              activeDot={{ r: 5 }}
-              animationDuration={500}
-              animationEasing="ease-out"
-            />
-          </LineChart>
-        </ResponsiveContainer>
-      </div>
+      <LineChart data={data as unknown as Record<string, unknown>[]} xDataKey="date" aspectRatio="16 / 7">
+        <Grid horizontal strokeDasharray="4,4" highlightRowValues={[averageRounded]} />
+        <Line dataKey="value" stroke={lineColor} showMarkers />
+        <XAxis numTicks={6} />
+        <ChartTooltip rows={(point) => [{ color: lineColor, label: "", value: `${point.value}${unit}` }]} />
+      </LineChart>
     </div>
   );
 }

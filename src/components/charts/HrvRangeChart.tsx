@@ -1,15 +1,26 @@
 "use client";
 
-import { Bar, BarChart, CartesianGrid, Cell, ReferenceArea, ReferenceLine, ResponsiveContainer, Tooltip, XAxis, YAxis } from "recharts";
-import { CHART, STATUS } from "@/lib/chartColors";
+import { BarChart } from "./bar-chart";
+import { Bar } from "./bar";
+import { Grid } from "./grid";
+import { BarXAxis } from "./bar-x-axis";
+import { ChartTooltip } from "./tooltip";
+import { STATUS } from "@/lib/chartColors";
 import { formatDate } from "@/lib/format";
 import { hrvStatusLabel, hrvStatusSeverity } from "@/lib/wellness";
 import { useIsDark } from "@/lib/useIsDark";
 import type { WellnessDay } from "@/lib/types";
 
+/**
+ * Per-night HRV colored by that night's status. bklit's <Bar> only takes a
+ * single fill for the whole series (no per-datum Cell equivalent), so this
+ * splits the data into one series per severity — only one series has a
+ * real number for any given day, the rest are undefined and skipped — and
+ * renders them `stacked` so every bar still lands at full band width in the
+ * same x position regardless of which series carries its value.
+ */
 export function HrvRangeChart({ days }: { days: WellnessDay[] }) {
   const isDark = useIsDark();
-  const c = isDark ? CHART.dark : CHART.light;
   const mode = isDark ? "dark" : "light";
   const status = {
     good: STATUS.good[mode],
@@ -20,26 +31,28 @@ export function HrvRangeChart({ days }: { days: WellnessDay[] }) {
 
   const data = days
     .filter((d) => d.avgOvernightHrv)
-    .map((d) => ({
-      date: d.date,
-      label: formatDate(d.date),
-      value: Math.round(d.avgOvernightHrv!),
-      color: status[hrvStatusSeverity(d.hrvStatus)],
-      statusLabel: hrvStatusLabel(d.hrvStatus),
-    }));
+    .map((d) => {
+      const severity = hrvStatusSeverity(d.hrvStatus);
+      const value = Math.round(d.avgOvernightHrv!);
+      return {
+        date: d.date,
+        label: formatDate(d.date),
+        statusLabel: hrvStatusLabel(d.hrvStatus),
+        valueGood: severity === "good" ? value : undefined,
+        valueWarning: severity === "warning" ? value : undefined,
+        valueSerious: severity === "serious" ? value : undefined,
+        valueCritical: severity === "critical" ? value : undefined,
+      };
+    });
 
-  // Baseline drifts slowly — use the most recent day that has it as the current reference band.
   const withBaseline = [...days].reverse().find((d) => d.hrvBaselineBalancedLow && d.hrvBaselineBalancedUpper);
-  const lowUpper = withBaseline?.hrvBaselineLowUpper;
   const balancedLow = withBaseline?.hrvBaselineBalancedLow;
   const balancedUpper = withBaseline?.hrvBaselineBalancedUpper;
 
   if (data.length === 0) return <p className="text-sm text-ink-secondary">Todavía no hay suficientes datos sincronizados.</p>;
 
-  const values = data.map((d) => d.value);
+  const values = days.filter((d) => d.avgOvernightHrv).map((d) => Math.round(d.avgOvernightHrv!));
   const average = Math.round(values.reduce((s, v) => s + v, 0) / values.length);
-  const yMin = Math.max(0, Math.floor(Math.min(...values, lowUpper ?? Infinity) / 10) * 10 - 5);
-  const yMax = Math.ceil(Math.max(...values, balancedUpper ?? 0) / 10) * 10 + 5;
 
   return (
     <div>
@@ -52,41 +65,28 @@ export function HrvRangeChart({ days }: { days: WellnessDay[] }) {
         </div>
         <span className="tabular text-sm font-medium text-ink-secondary">Promedio {average} ms</span>
       </div>
-      <div className="h-56 w-full">
-        <ResponsiveContainer width="100%" height="100%">
-          <BarChart data={data} margin={{ top: 8, right: 8, left: 0, bottom: 0 }}>
-            <CartesianGrid vertical={false} stroke={c.gridline} strokeDasharray="3 3" />
-            <XAxis dataKey="label" tick={{ fill: c.muted, fontSize: 11 }} axisLine={{ stroke: c.baseline }} tickLine={false} interval={data.length > 10 ? Math.ceil(data.length / 8) : 0} />
-            <YAxis domain={[yMin, yMax]} tick={{ fill: c.muted, fontSize: 11 }} axisLine={false} tickLine={false} width={34} />
-            {balancedLow !== undefined && balancedUpper !== undefined && (
-              <ReferenceArea y1={balancedLow} y2={balancedUpper} fill={status.good} fillOpacity={0.1} strokeOpacity={0} />
-            )}
-            <ReferenceLine y={average} stroke={c.baseline} strokeDasharray="4 4" />
-            <Tooltip
-              cursor={{ fill: c.gridline, opacity: 0.4 }}
-              contentStyle={{
-                background: c.surface,
-                border: `1px solid ${c.gridline}`,
-                borderRadius: 14,
-                fontSize: 12,
-                color: c.ink,
-                boxShadow: "0 8px 24px -8px rgb(0 0 0 / 0.18)",
-              }}
-              labelStyle={{ color: c.ink }}
-              itemStyle={{ color: c.ink }}
-              formatter={(value, _name, item) => {
-                const statusLabel = (item?.payload as { statusLabel?: string } | undefined)?.statusLabel;
-                return [`${value} ms${statusLabel ? ` · ${statusLabel}` : ""}`, "HRV"];
-              }}
-            />
-            <Bar dataKey="value" radius={[4, 4, 0, 0]} maxBarSize={22} animationDuration={450} animationEasing="ease-out">
-              {data.map((d) => (
-                <Cell key={d.date} fill={d.color} />
-              ))}
-            </Bar>
-          </BarChart>
-        </ResponsiveContainer>
-      </div>
+      <BarChart data={data as unknown as Record<string, unknown>[]} xDataKey="label" aspectRatio="16 / 7" stacked barGap={0.35}>
+        <Grid horizontal strokeDasharray="4,4" highlightRowValues={[average]} />
+        <Bar dataKey="valueGood" fill={status.good} />
+        <Bar dataKey="valueWarning" fill={status.warning} />
+        <Bar dataKey="valueSerious" fill={status.serious} />
+        <Bar dataKey="valueCritical" fill={status.critical} />
+        <BarXAxis maxLabels={8} />
+        <ChartTooltip
+          rows={(point) => {
+            const p = point as { valueGood?: number; valueWarning?: number; valueSerious?: number; valueCritical?: number; statusLabel?: string };
+            const entry =
+              p.valueGood !== undefined
+                ? { value: p.valueGood, color: status.good }
+                : p.valueWarning !== undefined
+                  ? { value: p.valueWarning, color: status.warning }
+                  : p.valueSerious !== undefined
+                    ? { value: p.valueSerious, color: status.serious }
+                    : { value: p.valueCritical, color: status.critical };
+            return [{ color: entry.color, label: "HRV", value: `${entry.value} ms · ${p.statusLabel}` }];
+          }}
+        />
+      </BarChart>
       {balancedLow !== undefined && balancedUpper !== undefined && (
         <p className="mt-2 text-xs text-ink-muted">Tu rango balanceado actual (según Garmin): {balancedLow}-{balancedUpper} ms.</p>
       )}

@@ -1,17 +1,10 @@
 "use client";
 
-import {
-  Bar,
-  BarChart,
-  CartesianGrid,
-  Legend,
-  ResponsiveContainer,
-  Tooltip,
-  XAxis,
-  YAxis,
-} from "recharts";
-import { ACTUAL_COLOR, CHART, PLAN_COLOR } from "@/lib/chartColors";
-import { useIsDark } from "@/lib/useIsDark";
+import { BarChart } from "./bar-chart";
+import { Bar } from "./bar";
+import { Grid } from "./grid";
+import { BarXAxis } from "./bar-x-axis";
+import { ChartTooltip } from "./tooltip";
 
 export interface WeeklyVolumePoint {
   week: number;
@@ -22,63 +15,30 @@ export interface WeeklyVolumePoint {
 }
 
 export function WeeklyVolumeChart({ data }: { data: WeeklyVolumePoint[] }) {
-  const isDark = useIsDark();
-  const c = isDark ? CHART.dark : CHART.light;
-  const plan = isDark ? PLAN_COLOR.dark : PLAN_COLOR.light;
-  const actual = isDark ? ACTUAL_COLOR.dark : ACTUAL_COLOR.light;
-
   return (
-    <div className="h-72 w-full">
-      <ResponsiveContainer width="100%" height="100%">
-        <BarChart data={data} margin={{ top: 8, right: 8, left: 0, bottom: 0 }} barGap={4}>
-          <defs>
-            <linearGradient id="volPlanFill" x1="0" y1="0" x2="0" y2="1">
-              <stop offset="0%" stopColor={plan} stopOpacity={1} />
-              <stop offset="100%" stopColor={plan} stopOpacity={0.75} />
-            </linearGradient>
-            <linearGradient id="volActualFill" x1="0" y1="0" x2="0" y2="1">
-              <stop offset="0%" stopColor={actual} stopOpacity={1} />
-              <stop offset="100%" stopColor={actual} stopOpacity={0.75} />
-            </linearGradient>
-          </defs>
-          <CartesianGrid vertical={false} stroke={c.gridline} strokeDasharray="3 3" />
-          <XAxis
-            dataKey="label"
-            tick={{ fill: c.muted, fontSize: 11 }}
-            axisLine={{ stroke: c.baseline }}
-            tickLine={false}
-            interval={0}
-          />
-          <YAxis
-            tick={{ fill: c.muted, fontSize: 11 }}
-            axisLine={false}
-            tickLine={false}
-            width={30}
-            tickFormatter={(v) => `${v}`}
-          />
-          <Tooltip
-            cursor={{ fill: c.gridline, opacity: 0.4 }}
-            contentStyle={{
-              background: c.surface,
-              border: `1px solid ${c.gridline}`,
-              borderRadius: 14,
-              fontSize: 12,
-              color: c.ink,
-              boxShadow: "0 8px 24px -8px rgb(0 0 0 / 0.18)",
-            }}
-            labelStyle={{ color: c.ink }}
-            itemStyle={{ color: c.ink }}
-            formatter={(value, name) => [`${value} km`, name === "plannedKm" ? "Plan" : "Real"]}
-            labelFormatter={(label) => label}
-          />
-          <Legend
-            formatter={(value) => (value === "plannedKm" ? "Plan" : "Real")}
-            wrapperStyle={{ fontSize: 12, color: c.inkSecondary }}
-          />
-          <Bar dataKey="plannedKm" fill="url(#volPlanFill)" radius={[6, 6, 0, 0]} maxBarSize={16} animationDuration={500} animationEasing="ease-out" />
-          <Bar dataKey="actualKm" fill="url(#volActualFill)" radius={[6, 6, 0, 0]} maxBarSize={16} animationDuration={500} animationEasing="ease-out" />
-        </BarChart>
-      </ResponsiveContainer>
+    <div>
+      <BarChart data={data as unknown as Record<string, unknown>[]} xDataKey="label" aspectRatio="16 / 7" barGap={0.35}>
+        <Grid horizontal strokeDasharray="4,4" />
+        <Bar dataKey="plannedKm" fill="var(--chart-1)" />
+        <Bar dataKey="actualKm" fill="var(--chart-2)" />
+        <BarXAxis maxLabels={13} />
+        <ChartTooltip
+          rows={(point) => [
+            { color: "var(--chart-1)", label: "Plan", value: `${point.plannedKm} km` },
+            { color: "var(--chart-2)", label: "Real", value: `${point.actualKm} km` },
+          ]}
+        />
+      </BarChart>
+      <div className="mt-3 flex gap-4 text-xs text-ink-secondary">
+        <span className="inline-flex items-center gap-1.5">
+          <span className="h-2 w-2 rounded-full" style={{ background: "var(--chart-1)" }} />
+          Plan
+        </span>
+        <span className="inline-flex items-center gap-1.5">
+          <span className="h-2 w-2 rounded-full" style={{ background: "var(--chart-2)" }} />
+          Real
+        </span>
+      </div>
     </div>
   );
 }

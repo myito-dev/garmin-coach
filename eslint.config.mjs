@@ -15,6 +15,13 @@ const eslintConfig = defineConfig([
     // Third-party agent skill packages (npx skills add) — not part of this app.
     ".agents/**",
     ".claude/**",
+    // bklit chart registry internals (installed via `shadcn add @bklit/...`) — vendor
+    // code we consume, not author; our own wrapper charts stay PascalCase and are
+    // still linted. Re-run this glob if a future `shadcn add` drops new lowercase files.
+    "src/components/charts/[a-z]*.{ts,tsx}",
+    "src/components/charts/tooltip/**",
+    "src/components/shimmering-text.tsx",
+    "src/components/ui/button.tsx",
   ]),
 ]);
 

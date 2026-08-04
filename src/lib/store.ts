@@ -1,11 +1,12 @@
 import "server-only";
 import { getRedis } from "./kv";
-import type { ActivitySplit, GarminActivitySummary, GarminTokenPair, WellnessDay } from "./types";
+import type { ActivitySplit, GarminActivitySummary, GarminTokenPair, RoutePoint, WellnessDay } from "./types";
 
 const KEY_TOKEN = "garmin:token";
 const KEY_CACHE = "activities:cache";
 const KEY_WELLNESS_CACHE = "wellness:cache";
 const SPLITS_KEY_PREFIX = "splits:";
+const ROUTE_KEY_PREFIX = "route:";
 
 interface ActivitiesCache {
   lastSyncedAt: string | null;
@@ -69,7 +70,8 @@ export async function mergeWellnessCache(freshDays: WellnessDay[]): Promise<Well
 export async function clearGarminSession(): Promise<void> {
   const redis = getRedis();
   const splitKeys = await redis.keys(`${SPLITS_KEY_PREFIX}*`);
-  await redis.del(KEY_TOKEN, KEY_CACHE, KEY_WELLNESS_CACHE, ...splitKeys);
+  const routeKeys = await redis.keys(`${ROUTE_KEY_PREFIX}*`);
+  await redis.del(KEY_TOKEN, KEY_CACHE, KEY_WELLNESS_CACHE, ...splitKeys, ...routeKeys);
 }
 
 export async function readSplitsCache(activityId: number): Promise<ActivitySplit[] | null> {
@@ -78,4 +80,12 @@ export async function readSplitsCache(activityId: number): Promise<ActivitySplit
 
 export async function writeSplitsCache(activityId: number, splits: ActivitySplit[]): Promise<void> {
   await getRedis().set(`${SPLITS_KEY_PREFIX}${activityId}`, splits);
+}
+
+export async function readRouteCache(activityId: number): Promise<RoutePoint[] | null> {
+  return (await getRedis().get<RoutePoint[]>(`${ROUTE_KEY_PREFIX}${activityId}`)) ?? null;
+}
+
+export async function writeRouteCache(activityId: number, points: RoutePoint[]): Promise<void> {
+  await getRedis().set(`${ROUTE_KEY_PREFIX}${activityId}`, points);
 }

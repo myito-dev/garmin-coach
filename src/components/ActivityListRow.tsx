@@ -1,6 +1,6 @@
 "use client";
 
-import { motion } from "framer-motion";
+import { motion } from "motion/react";
 import Link from "next/link";
 import { formatDate, formatDistance, formatPace, mpsToSecPerKm } from "@/lib/format";
 import { springSmooth, tapScaleSmall } from "@/lib/motion";

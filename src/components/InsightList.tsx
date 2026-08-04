@@ -1,6 +1,6 @@
 "use client";
 
-import { motion } from "framer-motion";
+import { motion } from "motion/react";
 import { springSmooth } from "@/lib/motion";
 import type { Insight } from "@/lib/types";
 import { SeverityBadge } from "./ui/Badges";

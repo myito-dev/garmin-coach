@@ -97,6 +97,11 @@ export interface ActivitySplit {
   elevationGainM?: number;
 }
 
+export interface RoutePoint {
+  lat: number;
+  lon: number;
+}
+
 /** One day of Garmin wellness/health data — separate from activities, synced by calendar date. */
 export interface WellnessDay {
   /** ISO date, e.g. 2026-07-30 */

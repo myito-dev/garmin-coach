@@ -1,6 +1,6 @@
 "use client";
 
-import { motion } from "framer-motion";
+import { motion } from "motion/react";
 import { HR_ZONES } from "@/data/trainingPlan";
 import { HR_ZONE_COLOR } from "@/lib/chartColors";
 import { springSmooth } from "@/lib/motion";

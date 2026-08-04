@@ -4,10 +4,12 @@ import { ActivityListRow } from "@/components/ActivityListRow";
 import { SyncButton } from "@/components/SyncButton";
 import { GlassCard } from "@/components/ui/GlassCard";
 import { CountdownRing } from "@/components/ui/CountdownRing";
-import { StatTile } from "@/components/ui/StatTile";
+import { StatPill } from "@/components/ui/StatPill";
 import { KindBadge } from "@/components/ui/Badges";
 import { Marquee } from "@/components/Marquee";
 import { RecoveryCard } from "@/components/RecoveryCard";
+import { FloatingPaths } from "@/components/FloatingPaths";
+import { AnimatedTitle } from "@/components/AnimatedTitle";
 import { WeeklyVolumeChart, type WeeklyVolumePoint } from "@/components/charts/WeeklyVolumeChart";
 import { formatDateLong, formatPaceRange, daysUntil, paceLabelToSeconds, todayIso } from "@/lib/format";
 import { analyzeActivity } from "@/lib/insights";
@@ -77,7 +79,7 @@ export default async function DashboardPage() {
     <div className="mx-auto max-w-6xl space-y-6 px-4 py-6 sm:px-6 sm:py-10">
       {/* Hero */}
       <GlassCard className="hero-glass relative overflow-hidden !p-0">
-        <div aria-hidden className="texture-topo pointer-events-none absolute inset-0" />
+        <FloatingPaths />
         <div
           aria-hidden
           className="pointer-events-none absolute -right-16 -top-16 h-64 w-64 rounded-full opacity-[0.18] blur-3xl"
@@ -94,7 +96,8 @@ export default async function DashboardPage() {
               {RACE.name} · {RACE.city}
             </p>
             <h1 className="font-display mt-3 text-balance text-5xl leading-[0.95] sm:text-6xl lg:text-7xl">
-              Objetivo <span className="spotlight">{RACE.goalTimeLabel}</span>
+              <AnimatedTitle text="Objetivo" />{" "}
+              <AnimatedTitle text={RACE.goalTimeLabel} className="spotlight" delayStart={0.25} />
             </h1>
             <p className="mt-3 text-ink-secondary">{formatDateLong(RACE.date)}</p>
             {currentWeek && (
@@ -162,11 +165,7 @@ export default async function DashboardPage() {
         <div className="mb-2 flex items-center justify-between">
           <h2 className="text-lg font-semibold">Volumen semanal</h2>
         </div>
-        <div className="overflow-x-auto">
-          <div className="min-w-[720px]">
-            <WeeklyVolumeChart data={volumeData} />
-          </div>
-        </div>
+        <WeeklyVolumeChart data={volumeData} />
       </GlassCard>
 
       {/* Recovery */}
@@ -191,10 +190,58 @@ export default async function DashboardPage() {
           </div>
           <p className="mb-4 text-sm text-ink-secondary">{diag.summary}</p>
           <div className="grid grid-cols-2 gap-3">
-            <StatTile label="Mejor 10K" value={diag.best10k.timeLabel} sub={diag.best10k.paceLabel} />
-            <StatTile label="Mejor 5K" value={diag.best5k.timeLabel} sub={diag.best5k.paceLabel} />
-            <StatTile label="Mejor medio" value={diag.bestHalf.timeLabel} sub={diag.bestHalf.paceLabel} />
-            <StatTile label="Predicción Riegel" value={diag.riegelPrediction} sub="a partir del 10K" />
+            <StatPill
+              index={0}
+              color="blue"
+              icon={
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+                  <path d="M13 2 3 14h7l-1 8 11-14h-7l1-6z" />
+                </svg>
+              }
+              label="Mejor 10K"
+              value={diag.best10k.timeLabel}
+              sub={diag.best10k.paceLabel}
+            />
+            <StatPill
+              index={1}
+              color="lime"
+              icon={
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+                  <circle cx="12" cy="12" r="9" />
+                  <circle cx="12" cy="12" r="4.5" />
+                  <circle cx="12" cy="12" r="0.5" fill="currentColor" />
+                </svg>
+              }
+              label="Mejor 5K"
+              value={diag.best5k.timeLabel}
+              sub={diag.best5k.paceLabel}
+            />
+            <StatPill
+              index={2}
+              color="green"
+              icon={
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+                  <circle cx="12" cy="8" r="5" />
+                  <path d="M8.5 12.5 7 22l5-3 5 3-1.5-9.5" />
+                </svg>
+              }
+              label="Mejor medio"
+              value={diag.bestHalf.timeLabel}
+              sub={diag.bestHalf.paceLabel}
+            />
+            <StatPill
+              index={3}
+              color="orange"
+              icon={
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+                  <path d="M3 17l6-6 4 4 8-8" />
+                  <path d="M15 7h6v6" />
+                </svg>
+              }
+              label="Predicción Riegel"
+              value={diag.riegelPrediction}
+              sub="a partir del 10K"
+            />
           </div>
         </GlassCard>
 

@@ -2,7 +2,7 @@ import "server-only";
 import { GarminConnect } from "garmin-connect";
 import type { IActivity } from "garmin-connect/dist/garmin/types/activity";
 import { readStoredToken, writeStoredToken } from "./store";
-import type { ActivitySplit, GarminActivitySummary, GarminTokenPair, WellnessDay } from "./types";
+import type { ActivitySplit, GarminActivitySummary, GarminTokenPair, RoutePoint, WellnessDay } from "./types";
 import { todayIso } from "./format";
 
 interface RawLapDTO {
@@ -98,6 +98,42 @@ export async function fetchActivitySplits(activityId: number): Promise<ActivityS
     averageCadenceSpm: lap.averageRunCadence || undefined,
     elevationGainM: lap.elevationGain || undefined,
   }));
+}
+
+interface RawMetricDescriptor {
+  metricsIndex: number;
+  key: string;
+}
+
+interface RawActivityDetails {
+  metricDescriptors?: RawMetricDescriptor[];
+  activityDetailMetrics?: { metrics: (number | null)[] }[];
+}
+
+/**
+ * GPS route for an activity, decimated by Garmin to a small polyline. Same
+ * "Custom requests" undocumented-endpoint pattern as splits/HRV baseline —
+ * this is the same endpoint Garmin Connect's own activity map uses.
+ */
+export async function fetchActivityRoute(activityId: number): Promise<RoutePoint[]> {
+  const client = await getAuthenticatedClient();
+  const url = `https://connectapi.garmin.com/activity-service/activity/${activityId}/details?maxChartSize=1&maxPolylineSize=300`;
+  const res = await client.get<RawActivityDetails>(url);
+  const descriptors = res?.metricDescriptors ?? [];
+  const latIndex = descriptors.find((d) => d.key === "directLatitude")?.metricsIndex;
+  const lonIndex = descriptors.find((d) => d.key === "directLongitude")?.metricsIndex;
+  if (latIndex === undefined || lonIndex === undefined) return [];
+
+  const rows = res?.activityDetailMetrics ?? [];
+  const points: RoutePoint[] = [];
+  for (const row of rows) {
+    const lat = row.metrics[latIndex];
+    const lon = row.metrics[lonIndex];
+    if (typeof lat === "number" && typeof lon === "number" && (lat !== 0 || lon !== 0)) {
+      points.push({ lat, lon });
+    }
+  }
+  return points;
 }
 
 interface RawSleepDTO {

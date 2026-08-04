@@ -1,6 +1,6 @@
 "use client";
 
-import { motion } from "framer-motion";
+import { motion } from "motion/react";
 import { formatPace } from "@/lib/format";
 import { springSmooth } from "@/lib/motion";
 
