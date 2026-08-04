@@ -9,6 +9,7 @@ import { KindBadge } from "@/components/ui/Badges";
 import { Marquee } from "@/components/Marquee";
 import { RecoveryCard } from "@/components/RecoveryCard";
 import { FloatingPaths } from "@/components/FloatingPaths";
+import { RouteGlow } from "@/components/RouteGlow";
 import { AnimatedTitle } from "@/components/AnimatedTitle";
 import { WeeklyVolumeChart, type WeeklyVolumePoint } from "@/components/charts/WeeklyVolumeChart";
 import { formatDateLong, formatPaceRange, daysUntil, paceLabelToSeconds, todayIso } from "@/lib/format";
@@ -16,14 +17,30 @@ import { analyzeActivity } from "@/lib/insights";
 import { computeLiveDiagnosis } from "@/lib/diagnosis";
 import { actualKmForWeek, matchActivitiesToPlan } from "@/lib/planMatch";
 import { readActivitiesCache, readWellnessCache } from "@/lib/store";
+import { getActivityRoute } from "@/lib/route";
+import type { GarminActivitySummary, RoutePoint } from "@/lib/types";
 
 // Reads live Redis state (synced activities) — never prerender this at build time.
 export const dynamic = "force-dynamic";
+
+/** Route of the most recent activity that actually has GPS data — tries a
+ * handful of the latest activities (not just the very last one, which is
+ * often a strength session or rest-day log with no route) and stops at the
+ * first hit. Cache-first via getActivityRoute, so this is cheap once warm. */
+async function findHeroRoute(activities: GarminActivitySummary[]): Promise<RoutePoint[] | null> {
+  const recent = [...activities].sort((a, b) => (a.startTimeLocal < b.startTimeLocal ? 1 : -1)).slice(0, 5);
+  for (const activity of recent) {
+    const route = await getActivityRoute(activity.activityId);
+    if (route && route.length > 1) return route;
+  }
+  return null;
+}
 
 export default async function DashboardPage() {
   const today = todayIso();
   const cache = await readActivitiesCache();
   const wellness = await readWellnessCache();
+  const heroRoute = await findHeroRoute(cache.activities);
   const currentWeek = findWeekForDate(today);
   const todaySession = findSessionForDate(today);
   const daysLeft = Math.max(0, daysUntil(RACE.date));
@@ -79,16 +96,16 @@ export default async function DashboardPage() {
     <div className="mx-auto max-w-6xl space-y-6 px-4 py-6 sm:px-6 sm:py-10">
       {/* Hero */}
       <GlassCard className="hero-glass relative overflow-hidden !p-0">
-        <FloatingPaths />
+        {heroRoute ? <RouteGlow points={heroRoute} /> : <FloatingPaths />}
         <div
           aria-hidden
-          className="pointer-events-none absolute -right-16 -top-16 h-64 w-64 rounded-full opacity-[0.18] blur-3xl"
-          style={{ background: "radial-gradient(circle, var(--accent), transparent 70%)" }}
+          className="pointer-events-none absolute -right-16 -top-16 h-64 w-64 rounded-full opacity-[0.20] blur-3xl"
+          style={{ background: "radial-gradient(circle, var(--chart-2), transparent 70%)" }}
         />
         <div
           aria-hidden
-          className="pointer-events-none absolute -bottom-24 -left-16 h-72 w-72 rounded-full opacity-[0.14] blur-3xl"
-          style={{ background: "radial-gradient(circle, var(--spotlight-chip), transparent 70%)" }}
+          className="pointer-events-none absolute -bottom-24 -left-16 h-72 w-72 rounded-full opacity-[0.16] blur-3xl"
+          style={{ background: "radial-gradient(circle, var(--serious), transparent 70%)" }}
         />
         <div className="relative flex flex-col items-center gap-8 px-5 py-8 sm:flex-row sm:items-center sm:justify-between sm:px-10 sm:py-12">
           <div className="text-center sm:text-left">
@@ -108,6 +125,60 @@ export default async function DashboardPage() {
             )}
           </div>
           <CountdownRing daysLeft={daysLeft} totalDays={planSpanDays} />
+        </div>
+        <div className="relative z-10 grid grid-cols-2 gap-3 px-5 pb-6 sm:grid-cols-4 sm:px-10 sm:pb-8">
+          <StatPill
+            index={0}
+            color="blue"
+            icon={
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+                <path d="M13 2 3 14h7l-1 8 11-14h-7l1-6z" />
+              </svg>
+            }
+            label="Mejor 10K"
+            value={diag.best10k.timeLabel}
+            sub={diag.best10k.paceLabel}
+          />
+          <StatPill
+            index={1}
+            color="lime"
+            icon={
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+                <circle cx="12" cy="12" r="9" />
+                <circle cx="12" cy="12" r="4.5" />
+                <circle cx="12" cy="12" r="0.5" fill="currentColor" />
+              </svg>
+            }
+            label="Mejor 5K"
+            value={diag.best5k.timeLabel}
+            sub={diag.best5k.paceLabel}
+          />
+          <StatPill
+            index={2}
+            color="green"
+            icon={
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+                <circle cx="12" cy="8" r="5" />
+                <path d="M8.5 12.5 7 22l5-3 5 3-1.5-9.5" />
+              </svg>
+            }
+            label="Mejor medio"
+            value={diag.bestHalf.timeLabel}
+            sub={diag.bestHalf.paceLabel}
+          />
+          <StatPill
+            index={3}
+            color="orange"
+            icon={
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+                <path d="M3 17l6-6 4 4 8-8" />
+                <path d="M15 7h6v6" />
+              </svg>
+            }
+            label="Predicción Riegel"
+            value={diag.riegelPrediction}
+            sub="a partir del 10K"
+          />
         </div>
         <Marquee items={marqueeItems} />
       </GlassCard>
@@ -188,61 +259,7 @@ export default async function DashboardPage() {
               {live.hasLiveData ? "Actualizado con tus datos" : "Diagnóstico inicial"}
             </span>
           </div>
-          <p className="mb-4 text-sm text-ink-secondary">{diag.summary}</p>
-          <div className="grid grid-cols-2 gap-3">
-            <StatPill
-              index={0}
-              color="blue"
-              icon={
-                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
-                  <path d="M13 2 3 14h7l-1 8 11-14h-7l1-6z" />
-                </svg>
-              }
-              label="Mejor 10K"
-              value={diag.best10k.timeLabel}
-              sub={diag.best10k.paceLabel}
-            />
-            <StatPill
-              index={1}
-              color="lime"
-              icon={
-                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
-                  <circle cx="12" cy="12" r="9" />
-                  <circle cx="12" cy="12" r="4.5" />
-                  <circle cx="12" cy="12" r="0.5" fill="currentColor" />
-                </svg>
-              }
-              label="Mejor 5K"
-              value={diag.best5k.timeLabel}
-              sub={diag.best5k.paceLabel}
-            />
-            <StatPill
-              index={2}
-              color="green"
-              icon={
-                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
-                  <circle cx="12" cy="8" r="5" />
-                  <path d="M8.5 12.5 7 22l5-3 5 3-1.5-9.5" />
-                </svg>
-              }
-              label="Mejor medio"
-              value={diag.bestHalf.timeLabel}
-              sub={diag.bestHalf.paceLabel}
-            />
-            <StatPill
-              index={3}
-              color="orange"
-              icon={
-                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
-                  <path d="M3 17l6-6 4 4 8-8" />
-                  <path d="M15 7h6v6" />
-                </svg>
-              }
-              label="Predicción Riegel"
-              value={diag.riegelPrediction}
-              sub="a partir del 10K"
-            />
-          </div>
+          <p className="text-sm text-ink-secondary">{diag.summary}</p>
         </GlassCard>
 
         {/* Race strategy */}
