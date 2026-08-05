@@ -6,19 +6,16 @@ import { Grid } from "./grid";
 import { BarXAxis } from "./bar-x-axis";
 import { ChartTooltip } from "./tooltip";
 import { CATEGORICAL } from "@/lib/chartColors";
-import { useIsDark } from "@/lib/useIsDark";
 import { useInViewOnce } from "@/lib/useInViewOnce";
 import { formatDate } from "@/lib/format";
 import { formatHoursMinutes } from "@/lib/wellness";
 import type { WellnessDay } from "@/lib/types";
 
 export function SleepChart({ days }: { days: WellnessDay[] }) {
-  const isDark = useIsDark();
   const { ref, inView } = useInViewOnce<HTMLDivElement>();
-  const mode = isDark ? "dark" : "light";
-  const deep = CATEGORICAL.violet[mode];
-  const light = CATEGORICAL.blue[mode];
-  const rem = CATEGORICAL.aqua[mode];
+  const deep = CATEGORICAL.violet.dark;
+  const light = CATEGORICAL.blue.dark;
+  const rem = CATEGORICAL.aqua.dark;
   const awake = "var(--chart-grid)";
 
   const data = days

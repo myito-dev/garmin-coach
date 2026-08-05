@@ -8,7 +8,6 @@ import { ChartTooltip } from "./tooltip";
 import { STATUS } from "@/lib/chartColors";
 import { formatDate } from "@/lib/format";
 import { hrvStatusLabel, hrvStatusSeverity } from "@/lib/wellness";
-import { useIsDark } from "@/lib/useIsDark";
 import { useInViewOnce } from "@/lib/useInViewOnce";
 import type { WellnessDay } from "@/lib/types";
 
@@ -21,14 +20,12 @@ import type { WellnessDay } from "@/lib/types";
  * same x position regardless of which series carries its value.
  */
 export function HrvRangeChart({ days }: { days: WellnessDay[] }) {
-  const isDark = useIsDark();
   const { ref, inView } = useInViewOnce<HTMLDivElement>();
-  const mode = isDark ? "dark" : "light";
   const status = {
-    good: STATUS.good[mode],
-    warning: STATUS.warning[mode],
-    serious: STATUS.serious[mode],
-    critical: STATUS.critical[mode],
+    good: STATUS.good.dark,
+    warning: STATUS.warning.dark,
+    serious: STATUS.serious.dark,
+    critical: STATUS.critical.dark,
   };
 
   const data = days

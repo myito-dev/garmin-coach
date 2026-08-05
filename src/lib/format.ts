@@ -60,8 +60,7 @@ export function formatDateLong(iso: string): string {
 
 export function daysUntil(iso: string): number {
   const target = new Date(iso + "T00:00:00").getTime();
-  const now = new Date();
-  const today = new Date(now.getFullYear(), now.getMonth(), now.getDate()).getTime();
+  const today = new Date(todayIso() + "T00:00:00").getTime();
   return Math.round((target - today) / (1000 * 60 * 60 * 24));
 }
 
@@ -74,10 +73,12 @@ export function addDaysIso(iso: string, days: number): string {
   return `${y}-${m}-${day}`;
 }
 
+// The app's server (Vercel) runs in UTC, but the plan/race are anchored to
+// Mexico City time — without pinning this, "today" flips to tomorrow's date
+// as early as ~6pm local time (UTC is 6-7h ahead), which is exactly the bug
+// this was pinned to fix.
+const RACE_TIMEZONE = "America/Mexico_City";
+
 export function todayIso(): string {
-  const now = new Date();
-  const y = now.getFullYear();
-  const m = String(now.getMonth() + 1).padStart(2, "0");
-  const d = String(now.getDate()).padStart(2, "0");
-  return `${y}-${m}-${d}`;
+  return new Intl.DateTimeFormat("en-CA", { timeZone: RACE_TIMEZONE, year: "numeric", month: "2-digit", day: "2-digit" }).format(new Date());
 }

@@ -2,12 +2,10 @@
 
 import { SESSION_META } from "@/lib/sessionMeta";
 import type { InsightSeverity, SessionKind } from "@/lib/types";
-import { useIsDark } from "@/lib/useIsDark";
 
 export function KindBadge({ kind, className = "" }: { kind: SessionKind; className?: string }) {
-  const isDark = useIsDark();
   const meta = SESSION_META[kind];
-  const color = isDark ? meta.color.dark : meta.color.light;
+  const color = meta.color.dark;
   return (
     <span
       className={`inline-flex items-center gap-1.5 rounded-full border px-2.5 py-1 text-xs font-medium ${className}`}

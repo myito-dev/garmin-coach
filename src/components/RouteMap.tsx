@@ -6,7 +6,6 @@ import { MapContainer, TileLayer, Polyline, CircleMarker } from "react-leaflet";
 import type L from "leaflet";
 import "leaflet/dist/leaflet.css";
 import { STATUS } from "@/lib/chartColors";
-import { useIsDark } from "@/lib/useIsDark";
 import type { RoutePoint } from "@/lib/types";
 
 /** Draws the route stroke in progressively, like tracing it on a map — anime.js
@@ -38,8 +37,6 @@ function useDrawIn(pointCount: number) {
  * the call site) since Leaflet touches `window` on module load.
  */
 export function RouteMap({ points }: { points: RoutePoint[] }) {
-  const isDark = useIsDark();
-  const mode = isDark ? "dark" : "light";
   const polylineRef = useDrawIn(points.length);
 
   if (points.length < 2) return null;
@@ -52,13 +49,11 @@ export function RouteMap({ points }: { points: RoutePoint[] }) {
     [Math.max(...lats), Math.max(...lons)],
   ];
 
-  const tileUrl = isDark
-    ? "https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png"
-    : "https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png";
+  const tileUrl = "https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png";
 
   const routeColor = "var(--accent)";
-  const startColor = STATUS.good[mode];
-  const endColor = STATUS.critical[mode];
+  const startColor = STATUS.good.dark;
+  const endColor = STATUS.critical.dark;
 
   return (
     <div className="h-72 w-full overflow-hidden rounded-2xl border border-hairline">

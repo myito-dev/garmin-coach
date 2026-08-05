@@ -6,7 +6,6 @@ import { Grid } from "./grid";
 import { BarXAxis } from "./bar-x-axis";
 import { ChartTooltip } from "./tooltip";
 import { formatPace, mpsToSecPerKm } from "@/lib/format";
-import { useIsDark } from "@/lib/useIsDark";
 import { useInViewOnce } from "@/lib/useInViewOnce";
 import type { ActivitySplit, PaceRange } from "@/lib/types";
 
@@ -18,9 +17,8 @@ import type { ActivitySplit, PaceRange } from "@/lib/types";
  * Per-bar color uses the same two-series-split trick as HrvRangeChart.
  */
 export function SplitsChart({ splits, targetPace }: { splits: ActivitySplit[]; targetPace?: PaceRange }) {
-  const isDark = useIsDark();
   const { ref, inView } = useInViewOnce<HTMLDivElement>();
-  const good = isDark ? "#5c5b57" : "#c3c2b7";
+  const good = "#5c5b57";
   const serious = "var(--accent)";
   const accent = "var(--accent)";
 

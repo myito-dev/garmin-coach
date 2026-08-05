@@ -72,7 +72,7 @@ export function SaludHistory({ initialDays }: { initialDays: WellnessDay[] }) {
 
       <GlassCard>
         <h2 className="mb-2 text-lg font-semibold">FC en reposo</h2>
-        <TrendLineChart points={rhrPoints} color={{ light: "var(--accent)", dark: "var(--accent)" }} unit=" lpm" />
+        <TrendLineChart points={rhrPoints} color="var(--accent)" unit=" lpm" />
       </GlassCard>
 
       <GlassCard>

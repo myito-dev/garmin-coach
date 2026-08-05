@@ -24,21 +24,8 @@ export const metadata: Metadata = {
 };
 
 export const viewport: Viewport = {
-  themeColor: [
-    { media: "(prefers-color-scheme: light)", color: "#f9f9f7" },
-    { media: "(prefers-color-scheme: dark)", color: "#0d0d0d" },
-  ],
+  themeColor: "#0d0d0d",
 };
-
-const NO_FLASH_THEME_SCRIPT = `
-(function () {
-  try {
-    var stored = localStorage.getItem('theme');
-    var theme = stored || (matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
-    document.documentElement.setAttribute('data-theme', theme);
-  } catch (e) {}
-})();
-`;
 
 export default function RootLayout({
   children,
@@ -49,12 +36,8 @@ export default function RootLayout({
     <html
       lang="es"
       data-scroll-behavior="smooth"
-      suppressHydrationWarning
       className={cn("h-full", "antialiased", geistMono.variable, bricolage.variable, "font-sans", inter.variable)}
     >
-      <head>
-        <script dangerouslySetInnerHTML={{ __html: NO_FLASH_THEME_SCRIPT }} />
-      </head>
       <body className="min-h-full flex flex-col sm:flex-row bg-page text-ink">
         <NavBar />
         <main className="min-w-0 flex-1 pb-24 sm:pb-0">{children}</main>

@@ -4,7 +4,6 @@ import { motion } from "motion/react";
 import Link from "next/link";
 import { formatDate, formatDistance, formatPace, mpsToSecPerKm } from "@/lib/format";
 import { springSmooth, tapScaleSmall } from "@/lib/motion";
-import { useIsDark } from "@/lib/useIsDark";
 import { SESSION_META } from "@/lib/sessionMeta";
 import type { ActivitySplit, GarminActivitySummary, PlannedSession, RoutePoint } from "@/lib/types";
 import { KindBadge } from "./ui/Badges";
@@ -28,8 +27,7 @@ export function ActivityListRow({
   route?: RoutePoint[] | null;
   splits?: ActivitySplit[] | null;
 }) {
-  const isDark = useIsDark();
-  const kindColor = isDark ? SESSION_META[planned.kind].color.dark : SESSION_META[planned.kind].color.light;
+  const kindColor = SESSION_META[planned.kind].color.dark;
   const paceValues = actual && splits ? splits.filter((s) => s.distanceMeters >= 200).map((s) => mpsToSecPerKm(s.averageSpeedMps)) : [];
 
   const content = (

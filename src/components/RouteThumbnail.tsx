@@ -1,6 +1,5 @@
 import { routePathD } from "@/lib/routeSvg";
 import { SESSION_META } from "@/lib/sessionMeta";
-import { useIsDark } from "@/lib/useIsDark";
 import type { RoutePoint, SessionKind } from "@/lib/types";
 
 const SIZE = 40;
@@ -9,8 +8,7 @@ const SIZE = 40;
  * plain colored dot (session-kind color, same source KindBadge uses) when no
  * route is cached, rather than inventing a whole per-kind icon set. */
 export function RouteThumbnail({ kind, points }: { kind: SessionKind; points?: RoutePoint[] | null }) {
-  const isDark = useIsDark();
-  const color = isDark ? SESSION_META[kind].color.dark : SESSION_META[kind].color.light;
+  const color = SESSION_META[kind].color.dark;
 
   if (!points || points.length < 2) {
     return (

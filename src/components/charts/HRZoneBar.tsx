@@ -4,13 +4,11 @@ import { motion } from "motion/react";
 import { HR_ZONES } from "@/data/trainingPlan";
 import { HR_ZONE_COLOR } from "@/lib/chartColors";
 import { springSmooth } from "@/lib/motion";
-import { useIsDark } from "@/lib/useIsDark";
 
 const SCALE_MIN = 90;
 const SCALE_MAX = 205;
 
 export function HRZoneBar({ avgHR, maxHR }: { avgHR?: number; maxHR?: number }) {
-  const isDark = useIsDark();
   const toPct = (bpm: number) => Math.min(100, Math.max(0, ((bpm - SCALE_MIN) / (SCALE_MAX - SCALE_MIN)) * 100));
 
   return (
@@ -20,7 +18,7 @@ export function HRZoneBar({ avgHR, maxHR }: { avgHR?: number; maxHR?: number }) 
           const from = Math.max(SCALE_MIN, z.min);
           const to = z.max ?? SCALE_MAX;
           const widthPct = ((to - from) / (SCALE_MAX - SCALE_MIN)) * 100;
-          const color = isDark ? HR_ZONE_COLOR[z.zone].dark : HR_ZONE_COLOR[z.zone].light;
+          const color = HR_ZONE_COLOR[z.zone].dark;
           return (
             <motion.div
               key={z.zone}

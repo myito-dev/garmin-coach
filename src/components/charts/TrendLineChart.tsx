@@ -5,7 +5,6 @@ import { Line } from "./line";
 import { Grid } from "./grid";
 import { XAxis } from "./x-axis";
 import { ChartTooltip } from "./tooltip";
-import { useIsDark } from "@/lib/useIsDark";
 import { useInViewOnce } from "@/lib/useInViewOnce";
 
 export interface TrendPoint {
@@ -20,13 +19,12 @@ export function TrendLineChart({
   decimals = 0,
 }: {
   points: TrendPoint[];
-  color: { light: string; dark: string };
+  color: string;
   unit?: string;
   decimals?: number;
 }) {
-  const isDark = useIsDark();
   const { ref, inView } = useInViewOnce<HTMLDivElement>();
-  const lineColor = isDark ? color.dark : color.light;
+  const lineColor = color;
 
   const data = points.map((p) => ({ date: new Date(`${p.date}T00:00:00`), value: p.value }));
 

@@ -3,7 +3,6 @@ import { hasStoredToken, readActivitiesCache } from "@/lib/store";
 import { GlassCard } from "@/components/ui/GlassCard";
 import { SyncButton } from "@/components/SyncButton";
 import { DisconnectButton } from "@/components/DisconnectButton";
-import { ThemeToggle } from "@/components/ThemeToggle";
 
 export const metadata = {
   title: "Configuración · Garmin Coach",
@@ -22,16 +21,6 @@ export default async function ConfiguracionPage() {
         <p className="eyebrow text-accent">Preferencias y conexión</p>
         <h1 className="font-display mt-2 text-5xl sm:text-6xl">Configuración</h1>
       </div>
-
-      <GlassCard>
-        <div className="flex items-center justify-between gap-4">
-          <div>
-            <p className="font-medium">Apariencia</p>
-            <p className="text-sm text-ink-secondary">Cambia entre modo claro y oscuro.</p>
-          </div>
-          <ThemeToggle />
-        </div>
-      </GlassCard>
 
       <GlassCard>
         <h2 className="mb-4 text-lg font-semibold">Garmin Connect</h2>

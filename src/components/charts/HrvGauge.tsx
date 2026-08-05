@@ -2,7 +2,6 @@
 
 import { Gauge } from "./gauge";
 import { STATUS } from "@/lib/chartColors";
-import { useIsDark } from "@/lib/useIsDark";
 import type { WellnessDay } from "@/lib/types";
 
 /**
@@ -15,12 +14,10 @@ import type { WellnessDay } from "@/lib/types";
  * so the read is similar — just via fill level instead of a zoned arc.
  */
 export function HrvGauge({ days }: { days: WellnessDay[] }) {
-  const isDark = useIsDark();
-  const mode = isDark ? "dark" : "light";
   const colors = {
-    critical: STATUS.critical[mode],
-    warning: STATUS.warning[mode],
-    good: STATUS.good[mode],
+    critical: STATUS.critical.dark,
+    warning: STATUS.warning.dark,
+    good: STATUS.good.dark,
   };
 
   const withHrv = days.filter((d) => d.avgOvernightHrv);
