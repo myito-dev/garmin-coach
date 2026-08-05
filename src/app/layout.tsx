@@ -40,7 +40,7 @@ export default function RootLayout({
     >
       <body className="min-h-full flex flex-col sm:flex-row bg-page text-ink">
         <NavBar />
-        <main className="min-w-0 flex-1 pb-24 sm:pb-0">{children}</main>
+        <main className="min-w-0 flex-1 pb-[calc(env(safe-area-inset-bottom)+112px)] sm:pb-0">{children}</main>
       </body>
     </html>
   );

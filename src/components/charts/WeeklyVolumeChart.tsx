@@ -4,6 +4,7 @@ import { BarChart } from "./bar-chart";
 import { Bar } from "./bar";
 import { Grid } from "./grid";
 import { BarXAxis } from "./bar-x-axis";
+import { BarValueAxis } from "./bar-value-axis";
 import { ChartTooltip } from "./tooltip";
 import { useInViewOnce } from "@/lib/useInViewOnce";
 import { useIsMobile } from "@/lib/useIsMobile";
@@ -32,6 +33,7 @@ export function WeeklyVolumeChart({ data }: { data: WeeklyVolumePoint[] }) {
         <Bar dataKey="plannedKm" fill="var(--ink-muted)" />
         <Bar dataKey="actualKm" fill="var(--accent)" />
         <BarXAxis maxLabels={isMobile ? 7 : 13} />
+        <BarValueAxis format={(v) => `${Math.round(v)} km`} />
         <ChartTooltip
           rows={(point) => [
             { color: "var(--ink-muted)", label: "Plan", value: `${point.plannedKm} km` },

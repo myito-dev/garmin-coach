@@ -77,13 +77,19 @@ export function NavBar() {
         <Logo compact />
       </header>
 
-      {/* Mobile bottom tab bar. `position: fixed` combined with `backdrop-filter`
-          on the same element is a known WebKit bug — without its own compositor
-          layer, the bar can detach from the viewport and drift mid-scroll once
+      {/* Mobile bottom tab bar — floating, with a gap from the screen edge
+          rather than flush against it, so it doesn't sit right where iOS's
+          bottom-edge swipe (Siri / home gesture) triggers and steal touches.
+          `position: fixed` combined with `backdrop-filter` on the same
+          element is a known WebKit bug — without its own compositor layer,
+          the bar can detach from the viewport and drift mid-scroll once
           there are other blurred (glass) elements on the page. translateZ(0)
           forces it onto its own layer, isolating it from that. */}
-      <nav className="fixed bottom-0 left-0 right-0 z-40 border-t border-hairline glass px-2 pb-[env(safe-area-inset-bottom)] [transform:translateZ(0)] sm:hidden">
-        <div className="flex items-center justify-around py-1.5">
+      <nav
+        className="fixed inset-x-4 z-40 rounded-[28px] border border-hairline glass px-2 [transform:translateZ(0)] sm:hidden"
+        style={{ bottom: "calc(env(safe-area-inset-bottom) + 16px)" }}
+      >
+        <div className="flex items-center justify-around py-2">
           {LINKS.map((link) => {
             const active = pathname === link.href;
             const Icon = link.icon;
