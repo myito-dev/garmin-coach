@@ -7,6 +7,7 @@ import {
   hrvStatusSeverity,
   latestRestingHr,
   latestSleepNight,
+  latestVo2Max,
   restingHrDelta,
   sleepScoreSeverity,
 } from "@/lib/wellness";
@@ -15,13 +16,14 @@ export function RecoveryCard({ days }: { days: WellnessDay[] }) {
   const night = latestSleepNight(days);
   const hrDay = latestRestingHr(days);
   const delta = restingHrDelta(hrDay);
+  const vo2Day = latestVo2Max(days);
 
-  if (!night && !hrDay) {
+  if (!night && !hrDay && !vo2Day) {
     return <p className="text-sm text-ink-secondary">Todavía no hay datos de sueño ni frecuencia cardíaca sincronizados.</p>;
   }
 
   return (
-    <div className="grid grid-cols-1 gap-4 sm:grid-cols-3">
+    <div className="grid grid-cols-2 gap-4 sm:grid-cols-4">
       <div className="flex flex-col gap-1.5">
         <span className="text-xs font-medium uppercase tracking-wide text-ink-muted">
           Sueño{night ? ` · ${formatDate(night.date)}` : ""}
@@ -64,6 +66,18 @@ export function RecoveryCard({ days }: { days: WellnessDay[] }) {
                   ? "Igual al promedio de 7 días"
                   : `${delta > 0 ? "+" : ""}${delta} lpm vs. promedio 7 días`}
             </span>
+          </>
+        ) : (
+          <span className="text-sm text-ink-secondary">Sin datos</span>
+        )}
+      </div>
+
+      <div className="flex flex-col gap-1.5">
+        <span className="text-xs font-medium uppercase tracking-wide text-ink-muted">VO2 max</span>
+        {vo2Day?.vo2Max ? (
+          <>
+            <span className="tabular text-2xl font-semibold tracking-tight">{vo2Day.vo2Max}</span>
+            <span className="text-sm text-ink-secondary">Actualizado {formatDate(vo2Day.date)}</span>
           </>
         ) : (
           <span className="text-sm text-ink-secondary">Sin datos</span>

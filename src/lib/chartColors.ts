@@ -19,13 +19,12 @@ export const STATUS = {
   critical: { light: "#d03b3b", dark: "#e66767" },
 };
 
-/** HR zone -> color, as a brand-orange intensity ramp (pale/easy -> deep/max) —
- * zones are an ordered progression, so lightness/saturation alone carries the
- * meaning without needing a rainbow of unrelated hues. */
-export const HR_ZONE_COLOR: Record<number, { light: string; dark: string }> = {
-  1: { light: "#f5c9a8", dark: "#5c4433" },
-  2: { light: "#eda878", dark: "#8a5a35" },
-  3: { light: "#e88a54", dark: "#b8622f" },
-  4: { light: "#e35a1f", dark: "#e35a1f" },
-  5: { light: "#c0431a", dark: "#ff6b35" },
+/** HR zone -> color, matching Garmin's own zone color convention (gray, blue,
+ * green, orange, red) so it reads the same as the watch/Garmin Connect. */
+export const HR_ZONE_COLOR: Record<number, string> = {
+  1: "#8e9196",
+  2: "#3987e5",
+  3: "#1baf7a",
+  4: "#f0a020",
+  5: "#e5484d",
 };

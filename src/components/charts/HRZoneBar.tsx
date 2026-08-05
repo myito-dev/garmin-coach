@@ -18,7 +18,7 @@ export function HRZoneBar({ avgHR, maxHR }: { avgHR?: number; maxHR?: number }) 
           const from = Math.max(SCALE_MIN, z.min);
           const to = z.max ?? SCALE_MAX;
           const widthPct = ((to - from) / (SCALE_MAX - SCALE_MIN)) * 100;
-          const color = HR_ZONE_COLOR[z.zone].dark;
+          const color = HR_ZONE_COLOR[z.zone];
           return (
             <motion.div
               key={z.zone}

@@ -16,6 +16,15 @@ export function latestRestingHr(days: WellnessDay[]): WellnessDay | null {
   return null;
 }
 
+/** Most recent day with a VO2 max reading — Garmin only recomputes this after
+ * a qualifying effort, so it updates far less often than sleep/HRV/RHR. */
+export function latestVo2Max(days: WellnessDay[]): WellnessDay | null {
+  for (let i = days.length - 1; i >= 0; i--) {
+    if (days[i].vo2Max) return days[i];
+  }
+  return null;
+}
+
 export function formatHoursMinutes(totalSeconds: number): string {
   const h = Math.floor(totalSeconds / 3600);
   const m = Math.round((totalSeconds % 3600) / 60);

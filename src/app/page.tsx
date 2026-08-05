@@ -103,7 +103,14 @@ export default async function DashboardPage() {
           <div
             aria-hidden
             className="absolute inset-0"
-            style={{ background: "linear-gradient(115deg, var(--page) 0%, transparent 32%), radial-gradient(circle at 72% 38%, var(--chart-2), transparent 62%)" }}
+            style={{
+              // No directional scrim here — any dark-to-transparent linear mask
+              // layered on top of the glow reads as a visible seam no matter how
+              // wide/soft the gradient stops are (the eye tracks the rate at which
+              // the glow gets revealed). The radial glow alone provides enough
+              // separation since it's centered toward the right, away from the text.
+              background: "radial-gradient(circle at 72% 38%, var(--chart-2), transparent 62%)",
+            }}
           />
         </div>
         <div

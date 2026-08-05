@@ -24,6 +24,7 @@ export function SaludHistory({ initialDays }: { initialDays: WellnessDay[] }) {
   }, [days, range]);
 
   const rhrPoints: TrendPoint[] = filteredDays.filter((d) => d.restingHeartRate).map((d) => ({ date: d.date, value: d.restingHeartRate! }));
+  const vo2MaxPoints: TrendPoint[] = filteredDays.filter((d) => d.vo2Max).map((d) => ({ date: d.date, value: d.vo2Max! }));
   const insights = useMemo(() => computeWellnessInsights(days), [days]);
   const oldestDate = days[0]?.date;
 
@@ -73,6 +74,14 @@ export function SaludHistory({ initialDays }: { initialDays: WellnessDay[] }) {
       <GlassCard>
         <h2 className="mb-2 text-lg font-semibold">FC en reposo</h2>
         <TrendLineChart points={rhrPoints} color="var(--accent)" unit=" lpm" />
+      </GlassCard>
+
+      <GlassCard>
+        <h2 className="mb-1 text-lg font-semibold">VO2 max</h2>
+        <p className="mb-2 text-sm text-ink-secondary">
+          Estimado de consumo máximo de oxígeno de tu reloj Garmin. Solo se actualiza después de una carrera de calidad, así que avanza en escalones, no día a día.
+        </p>
+        <TrendLineChart points={vo2MaxPoints} color="var(--accent)" />
       </GlassCard>
 
       <GlassCard>

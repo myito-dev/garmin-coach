@@ -217,7 +217,33 @@ async function fetchHrvBaseline(client: GarminConnect, isoDate: string): Promise
   }
 }
 
-async function fetchWellnessDay(client: GarminConnect, date: Date): Promise<WellnessDay | null> {
+interface RawMaxMetEntry {
+  generic?: { calendarDate?: string; vo2MaxValue?: number } | null;
+}
+
+/**
+ * VO2 max history in one call — unlike sleep/HRV/RHR this is a range endpoint
+ * (not per-day), and Garmin only writes an entry on days it actually
+ * recomputed the estimate (after a qualifying run), so the result is sparse.
+ */
+async function fetchVo2MaxRange(client: GarminConnect, startIso: string, endIso: string): Promise<Map<string, number>> {
+  const map = new Map<string, number>();
+  try {
+    const res = await client.get<RawMaxMetEntry[]>(
+      `https://connectapi.garmin.com/metrics-service/metrics/maxmet/daily/${startIso}/${endIso}`
+    );
+    for (const entry of res ?? []) {
+      const date = entry.generic?.calendarDate;
+      const value = entry.generic?.vo2MaxValue;
+      if (date && typeof value === "number" && value > 0) map.set(date, value);
+    }
+  } catch {
+    // No history available for this window — leave the map empty rather than failing the whole sync.
+  }
+  return map;
+}
+
+async function fetchWellnessDay(client: GarminConnect, date: Date, vo2Max?: number): Promise<WellnessDay | null> {
   const isoDate = isoDateOf(date);
   const [sleep, hr, hrv] = await Promise.all([
     client.getSleepData(date).catch(() => null) as Promise<RawSleepData | null>,
@@ -226,7 +252,7 @@ async function fetchWellnessDay(client: GarminConnect, date: Date): Promise<Well
   ]);
   const dto = sleep?.dailySleepDTO;
   const restingHeartRate = sleep?.restingHeartRate || hr?.restingHeartRate || undefined;
-  if (!dto?.sleepTimeSeconds && !restingHeartRate) return null;
+  if (!dto?.sleepTimeSeconds && !restingHeartRate && !vo2Max) return null;
 
   return {
     date: isoDate,
@@ -245,15 +271,16 @@ async function fetchWellnessDay(client: GarminConnect, date: Date): Promise<Well
     restingHeartRate,
     sevenDayAvgRestingHeartRate: hr?.lastSevenDaysAvgRestingHeartRate || undefined,
     bodyBatteryChange: sleep?.bodyBatteryChange,
+    vo2Max,
   };
 }
 
 /**
- * Sleep, HRV and resting-HR history — Garmin wellness data is per calendar
- * day (not per activity), so this fetches a window of dates in parallel
- * rather than paging through an activities-style list. `endIso` is the most
- * recent date in the window (inclusive); pass an older date to page further
- * back for a manual history backfill instead of re-fetching recent days.
+ * Sleep, HRV, resting-HR and VO2 max history — Garmin wellness data is per
+ * calendar day (not per activity), so this fetches a window of dates in
+ * parallel rather than paging through an activities-style list. `endIso` is
+ * the most recent date in the window (inclusive); pass an older date to page
+ * further back for a manual history backfill instead of re-fetching recent days.
  */
 export async function fetchWellnessRange(days = 14, endIso?: string): Promise<WellnessDay[]> {
   const client = await getAuthenticatedClient();
@@ -263,7 +290,9 @@ export async function fetchWellnessRange(days = 14, endIso?: string): Promise<We
     d.setDate(d.getDate() - i);
     return d;
   });
-  const results = await Promise.all(dates.map((d) => fetchWellnessDay(client, d)));
+  const start = dates[dates.length - 1];
+  const vo2MaxByDate = await fetchVo2MaxRange(client, isoDateOf(start), isoDateOf(end));
+  const results = await Promise.all(dates.map((d) => fetchWellnessDay(client, d, vo2MaxByDate.get(isoDateOf(d)))));
   return results
     .filter((w): w is WellnessDay => w !== null)
     .sort((a, b) => (a.date < b.date ? -1 : 1));

@@ -124,6 +124,8 @@ export interface WellnessDay {
   restingHeartRate?: number;
   sevenDayAvgRestingHeartRate?: number;
   bodyBatteryChange?: number;
+  /** Running VO2 max estimate — only present on days Garmin actually recomputed it. */
+  vo2Max?: number;
 }
 
 /** Garmin OAuth1 + OAuth2 token pair, as returned by GarminConnect#exportToken(). Stored opaquely — only garmin.ts interprets its shape. */
