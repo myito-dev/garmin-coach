@@ -5,25 +5,24 @@ import { Bar } from "./bar";
 import { Grid } from "./grid";
 import { BarXAxis } from "./bar-x-axis";
 import { ChartTooltip } from "./tooltip";
-import { CATEGORICAL, STATUS } from "@/lib/chartColors";
 import { formatPace, mpsToSecPerKm } from "@/lib/format";
 import { useIsDark } from "@/lib/useIsDark";
 import { useInViewOnce } from "@/lib/useInViewOnce";
 import type { ActivitySplit, PaceRange } from "@/lib/types";
 
 /**
- * Per-km pace colored good/serious vs. target, plus the target band as two
- * highlighted boundary lines (bklit has no shaded-area primitive in this
- * install — highlightRowValues is the nearest native substitute). Per-bar
- * color uses the same good/serious-series-split trick as HrvRangeChart.
+ * Per-km pace: on-target kilometers read neutral (gray), off-target ones are
+ * highlighted in the brand accent so they draw the eye — plus the target
+ * band as two highlighted boundary lines (bklit has no shaded-area primitive
+ * in this install — highlightRowValues is the nearest native substitute).
+ * Per-bar color uses the same two-series-split trick as HrvRangeChart.
  */
 export function SplitsChart({ splits, targetPace }: { splits: ActivitySplit[]; targetPace?: PaceRange }) {
   const isDark = useIsDark();
   const { ref, inView } = useInViewOnce<HTMLDivElement>();
-  const mode = isDark ? "dark" : "light";
-  const good = STATUS.good[mode];
-  const serious = STATUS.serious[mode];
-  const accent = CATEGORICAL.blue[mode];
+  const good = isDark ? "#5c5b57" : "#c3c2b7";
+  const serious = "var(--accent)";
+  const accent = "var(--accent)";
 
   const raw = splits
     .filter((s) => s.distanceMeters >= 200)

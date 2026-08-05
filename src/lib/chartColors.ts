@@ -19,11 +19,13 @@ export const STATUS = {
   critical: { light: "#d03b3b", dark: "#e66767" },
 };
 
-/** Fixed identity mapping: HR zone -> categorical slot, cool (easy) to hot (max). */
+/** HR zone -> color, as a brand-orange intensity ramp (pale/easy -> deep/max) —
+ * zones are an ordered progression, so lightness/saturation alone carries the
+ * meaning without needing a rainbow of unrelated hues. */
 export const HR_ZONE_COLOR: Record<number, { light: string; dark: string }> = {
-  1: CATEGORICAL.blue,
-  2: CATEGORICAL.aqua,
-  3: CATEGORICAL.yellow,
-  4: CATEGORICAL.orange,
-  5: CATEGORICAL.red,
+  1: { light: "#f5c9a8", dark: "#5c4433" },
+  2: { light: "#eda878", dark: "#8a5a35" },
+  3: { light: "#e88a54", dark: "#b8622f" },
+  4: { light: "#e35a1f", dark: "#e35a1f" },
+  5: { light: "#c0431a", dark: "#ff6b35" },
 };

@@ -5,7 +5,7 @@ import { animate } from "animejs";
 import { MapContainer, TileLayer, Polyline, CircleMarker } from "react-leaflet";
 import type L from "leaflet";
 import "leaflet/dist/leaflet.css";
-import { STATUS, CATEGORICAL } from "@/lib/chartColors";
+import { STATUS } from "@/lib/chartColors";
 import { useIsDark } from "@/lib/useIsDark";
 import type { RoutePoint } from "@/lib/types";
 
@@ -56,7 +56,7 @@ export function RouteMap({ points }: { points: RoutePoint[] }) {
     ? "https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png"
     : "https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png";
 
-  const routeColor = CATEGORICAL.blue[mode];
+  const routeColor = "var(--accent)";
   const startColor = STATUS.good[mode];
   const endColor = STATUS.critical[mode];
 

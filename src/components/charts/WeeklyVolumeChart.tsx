@@ -29,23 +29,23 @@ export function WeeklyVolumeChart({ data }: { data: WeeklyVolumePoint[] }) {
         status={inView ? "ready" : "loading"}
       >
         <Grid horizontal strokeDasharray="4,4" />
-        <Bar dataKey="plannedKm" fill="var(--chart-1)" />
-        <Bar dataKey="actualKm" fill="var(--chart-2)" />
+        <Bar dataKey="plannedKm" fill="var(--ink-muted)" />
+        <Bar dataKey="actualKm" fill="var(--accent)" />
         <BarXAxis maxLabels={isMobile ? 7 : 13} />
         <ChartTooltip
           rows={(point) => [
-            { color: "var(--chart-1)", label: "Plan", value: `${point.plannedKm} km` },
-            { color: "var(--chart-2)", label: "Real", value: `${point.actualKm} km` },
+            { color: "var(--ink-muted)", label: "Plan", value: `${point.plannedKm} km` },
+            { color: "var(--accent)", label: "Real", value: `${point.actualKm} km` },
           ]}
         />
       </BarChart>
       <div className="mt-3 flex gap-4 text-xs text-ink-secondary">
         <span className="inline-flex items-center gap-1.5">
-          <span className="h-2 w-2 rounded-full" style={{ background: "var(--chart-1)" }} />
+          <span className="h-2 w-2 rounded-full" style={{ background: "var(--ink-muted)" }} />
           Plan
         </span>
         <span className="inline-flex items-center gap-1.5">
-          <span className="h-2 w-2 rounded-full" style={{ background: "var(--chart-2)" }} />
+          <span className="h-2 w-2 rounded-full" style={{ background: "var(--accent)" }} />
           Real
         </span>
       </div>

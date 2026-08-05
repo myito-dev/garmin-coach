@@ -8,7 +8,6 @@ import { SleepChart } from "./charts/SleepChart";
 import { HrvGauge } from "./charts/HrvGauge";
 import { HrvRangeChart } from "./charts/HrvRangeChart";
 import { TrendLineChart, type TrendPoint } from "./charts/TrendLineChart";
-import { CATEGORICAL } from "@/lib/chartColors";
 import { addDaysIso, todayIso } from "@/lib/format";
 import { computeWellnessInsights } from "@/lib/wellnessInsights";
 import type { WellnessDay } from "@/lib/types";
@@ -73,7 +72,7 @@ export function SaludHistory({ initialDays }: { initialDays: WellnessDay[] }) {
 
       <GlassCard>
         <h2 className="mb-2 text-lg font-semibold">FC en reposo</h2>
-        <TrendLineChart points={rhrPoints} color={CATEGORICAL.magenta} unit=" lpm" />
+        <TrendLineChart points={rhrPoints} color={{ light: "var(--accent)", dark: "var(--accent)" }} unit=" lpm" />
       </GlassCard>
 
       <GlassCard>
