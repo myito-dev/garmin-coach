@@ -21,6 +21,7 @@ export const metadata: Metadata = {
   title: "Garmin Coach by Mario Galindo",
   description:
     "Panel de entrenamiento conectado a Garmin Connect para el Medio Maratón de Puebla: plan de 13 semanas, comparación de sesiones y análisis de cada entrenamiento.",
+  manifest: "/manifest.json",
 };
 
 export const viewport: Viewport = {
