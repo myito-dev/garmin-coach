@@ -7,6 +7,12 @@ export const metadata = {
   title: "Plan · Garmin Coach",
 };
 
+// "Semana actual" depends on todayIso() at render time — without this, Next.js
+// prerenders the page once at build time and the current-week highlight freezes
+// on whatever date the last deploy happened to run on (same bug the dashboard's
+// `dynamic = "force-dynamic"` already fixes for its own today-dependent reads).
+export const dynamic = "force-dynamic";
+
 export default function PlanPage() {
   const today = todayIso();
 
