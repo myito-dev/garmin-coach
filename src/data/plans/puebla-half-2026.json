@@ -30,7 +30,7 @@
     "cadenceTypicalSpm": 168,
     "cadenceGoalSpm": [176, 180],
     "weeklyVolumeBeforePlan": "15-25 km",
-    "summary": "Velocidad de sobra (5:18/km en 10K) pero el medio de CDMX salió a ~5:53/km real. La limitante no es velocidad, es resistencia para sostenerla 21 km y un mejor reparto de ritmo (pacing). Recalibrado el 27 jul 2026 con tus primeras semanas reales de Garmin: tus rodajes 'Zona 2' (FC 143-152, dentro de Z2) se corren a 7:10-7:55/km, no a los 6:15-7:15/km que tenía el plan original — así que los días fáciles ahora van más despacio, y el ritmo rápido se reserva para calidad y la fase específica. Buena señal: tu Z2 real ya bajó de ~7:45/km en mayo a ~7:20-7:30/km en julio al mismo esfuerzo — la base aeróbica está mejorando. Ajustado de nuevo el 25 ago 2026: fascitis plantar leve obliga a descanso total de correr en la semana 6. El plan reconstruye el volumen con más cautela (retorno gradual en semana 7, sin velocidad hasta la semana 9), cancela el 10K de control y recorta el pico de la fase específica de ~48-50 km a ~42-44 km — perder una semana de base no compromete la meta si el regreso es sin dolor, pero forzarlo sí. El sub 2:00:00 sigue siendo el objetivo; si el dolor reaparece en cualquier punto, la prioridad pasa a llegar sano a la salida, no al tiempo."
+    "summary": "Velocidad de sobra (5:18/km en 10K) pero el medio de CDMX salió a ~5:53/km real. La limitante no es velocidad, es resistencia para sostenerla 21 km y un mejor reparto de ritmo (pacing). Recalibrado el 27 jul 2026 con tus primeras semanas reales de Garmin: tus rodajes 'Zona 2' (FC 143-152, dentro de Z2) se corren a 7:10-7:55/km, no a los 6:15-7:15/km que tenía el plan original — así que los días fáciles ahora van más despacio, y el ritmo rápido se reserva para calidad y la fase específica. Buena señal: tu Z2 real ya bajó de ~7:45/km en mayo a ~7:20-7:30/km en julio al mismo esfuerzo — la base aeróbica está mejorando. Ajustado de nuevo el 25 ago 2026: fascitis plantar leve obliga a descanso de trote entre semana en la semana 6 — sábado caminata a Paso de Cortés, domingo prueba corta de sensación. El retorno es moderado, no exagerado: molestia leve (1-3/10) que no aumenta se tolera, dolor agudo o que sube de nivel es la señal real de parar. El plan cancela el 10K de control de la semana 8 y retoma tempo desde esa misma semana, ritmo de carrera desde la semana 9, y recorta el pico de la fase específica solo un poco (de ~48-50 km a ~46-48 km) en vez de un recorte mayor. El sub 2:00:00 sigue siendo el objetivo; si el dolor empeora en cualquier punto, la prioridad cambia a llegar sano a la salida, no al tiempo."
   },
   "raceStrategy": [
     { "rangeLabel": "Km 1-5", "pace": "5:50-5:55/km", "note": "Controlado, FC por debajo de 175 bpm" },
@@ -241,14 +241,15 @@
       "startDate": "2026-08-24",
       "endDate": "2026-08-30",
       "phase": "Recuperación PF",
-      "focus": "Descanso total de impacto por fascitis plantar",
-      "totalKmLabel": "0 km — descanso de correr",
-      "highlight": "Fascitis plantar leve: esta semana no corres. La meta es llegar a 0/10 de dolor al caminar antes de retomar, no acumular más kilómetros.",
+      "focus": "Descanso de trote por fascitis plantar",
+      "totalKmLabel": "~2 km — descanso con prueba de dolor el domingo",
+      "highlight": "Fascitis plantar leve: sin trote entre semana. Sábado caminata a Paso de Cortés, domingo prueba corta. Molestia leve (1-3/10) que no aumenta se tolera — dolor agudo o que sube de nivel es la señal real de parar.",
       "days": [
         { "day": "Lun", "date": "2026-08-24", "kind": "descanso", "title": "Descanso total", "note": "Rodillo con botella fría bajo el arco, 2×8-10 min (mañana y noche) + estiramiento de gemelo/fascia, 3×30 seg por pierna." },
         { "day": "Mié", "date": "2026-08-26", "kind": "descanso", "title": "Descanso — fuerza excéntrica de gemelo", "note": "3×15 elevaciones de talón lentas (sube 1 seg, baja 3 seg) en un escalón, solo si no hay dolor; para si aparece. Opcional: bici o alberca muy suave 20-30 min sin impacto." },
         { "day": "Vie", "date": "2026-08-28", "kind": "descanso", "title": "Descanso — movilidad de pie y tobillo", "note": "Rueda una pelota de tenis/golf bajo el arco 5 min + doming/toe spreads 3×10. Nada de trote todavía." },
-        { "day": "Dom", "date": "2026-08-30", "kind": "descanso", "title": "Chequeo de dolor antes de la semana 7", "note": "Si llevas varios días sin dolor al pisar en frío por la mañana ni al caminar rápido, retomas trote muy suave el lunes. Si sigue doliendo, extiende el descanso otra semana — no vale la pena forzarlo." }
+        { "day": "Sáb", "date": "2026-08-29", "kind": "descanso", "title": "Caminata Paso de Cortés", "note": "Sigue siendo día sin trote, pero es actividad exigente en terreno irregular y altitud. Calzado con buen soporte de arco (no sandalias/tenis planos), baja el ritmo en las bajadas técnicas — son las que más cargan la fascia — y usa bastones si tienes. Hidrátate bien por la altitud." },
+        { "day": "Dom", "date": "2026-08-30", "kind": "rodaje", "title": "Prueba de dolor: trote muy corto", "distanceKm": 2, "pace": { "fast": "7:30", "slow": "8:00" }, "shoe": "Vomero", "note": "Después de la caminata del sábado, evalúa cómo amaneces. Si el pie está en 0-2/10 al levantarte, prueba 1.5-2 km trote muy suave alternando con caminata. Molestia leve que no aumenta ni te hace cojear está bien; dolor agudo, que sube de nivel o cambia tu pisada es señal de parar y caminar de regreso.", "garminHint": "Sin estructura — trote/caminata muy suave y corto, solo para evaluar sensación." }
       ]
     },
     {
@@ -258,14 +259,14 @@
       "startDate": "2026-08-31",
       "endDate": "2026-09-06",
       "phase": "Retorno a correr",
-      "focus": "Reintroducción gradual, todo Z2, sin velocidad",
-      "totalKmLabel": "~18-20 km",
-      "highlight": "Regresas a correr con precaución. Si el dolor sube de 2/10 en cualquier sesión, para y avísale a tu fisio/podólogo.",
+      "focus": "Reintroducción moderada, todo Z2",
+      "totalKmLabel": "~28-30 km",
+      "highlight": "Retorno moderado: molestia leve (1-3/10) que no aumenta está bien — para si el dolor se vuelve agudo, sube de nivel o te hace cambiar la pisada.",
       "days": [
-        { "day": "Lun", "date": "2026-08-31", "kind": "rodaje", "title": "4 km Z2 muy suave (test)", "distanceKm": 4, "pace": { "fast": "6:55", "slow": "7:35" }, "shoe": "Vomero", "note": "Corre solo si no hubo dolor al caminar los últimos días. Detente si sientes molestia en el arco.", "garminHint": "Sin estructura — trote muy suave, superficie plana, evita bajadas y terreno irregular esta semana." },
-        { "day": "Mié", "date": "2026-09-02", "kind": "rodaje", "title": "5 km Z2, sin tempo todavía", "distanceKm": 5, "pace": { "fast": "6:55", "slow": "7:35" }, "shoe": "Vomero", "note": "Nada de ritmo fuerte esta semana — el objetivo es solo acumular tiempo de pie sin dolor.", "garminHint": "Sin estructura — actividad de correr libre a ritmo Z2." },
-        { "day": "Vie", "date": "2026-09-04", "kind": "rodaje", "title": "4 km Z2 suave", "distanceKm": 4, "pace": { "fast": "6:55", "slow": "7:35" }, "shoe": "Vomero", "garminHint": "Sin estructura — trote muy suave." },
-        { "day": "Dom", "date": "2026-09-06", "kind": "rodaje", "title": "6 km Z2 cómodo, sin cierre", "distanceKm": 6, "pace": { "fast": "6:55", "slow": "7:35" }, "shoe": "Vomero", "note": "Sustituye al long run esta semana — cómodo, conversacional, sin exigir el pie.", "garminHint": "Sin estructura — actividad de correr libre a ritmo Z2, todo el recorrido." }
+        { "day": "Lun", "date": "2026-08-31", "kind": "rodaje", "title": "6 km Z2", "distanceKm": 6, "pace": { "fast": "6:55", "slow": "7:35" }, "shoe": "Vomero", "garminHint": "Sin estructura — actividad de correr libre a ritmo Z2." },
+        { "day": "Mié", "date": "2026-09-02", "kind": "rodaje", "title": "7 km Z2 + 4×20\" strides suaves", "distanceKm": 7, "pace": { "fast": "6:55", "slow": "7:35" }, "shoe": "Vomero", "note": "Strides muy controlados, sensación de \"piernas vivas\", no velocidad — para si sientes el pie.", "garminHint": "Corre 6-6.5 km libres a tu ritmo Z2 y termina con: Repetir 4x [20 seg progresión suave / 40 seg trote o caminar]." },
+        { "day": "Vie", "date": "2026-09-04", "kind": "rodaje", "title": "6 km Z2", "distanceKm": 6, "pace": { "fast": "6:55", "slow": "7:35" }, "shoe": "Vomero", "garminHint": "Sin estructura — actividad de correr libre a ritmo Z2." },
+        { "day": "Dom", "date": "2026-09-06", "kind": "long_run", "title": "11 km cómodo, sin cierre", "distanceKm": 11, "pace": { "fast": "6:55", "slow": "7:35" }, "shoe": "Vomero", "note": "Sin cierre firme todavía — cómodo, conversacional.", "garminHint": "Sin estructura — actividad de correr libre a ritmo Z2, todo el recorrido." }
       ]
     },
     {
@@ -275,13 +276,13 @@
       "startDate": "2026-09-07",
       "endDate": "2026-09-13",
       "phase": "Reconstrucción",
-      "focus": "Sube el volumen, strides ligeros, aún sin velocidad dura",
-      "totalKmLabel": "~28-30 km",
+      "focus": "Primer tempo desde la lesión, sube volumen",
+      "totalKmLabel": "~35-36 km",
       "days": [
-        { "day": "Lun", "date": "2026-09-07", "kind": "rodaje", "title": "6 km Z2 + 4×15\" progresiones suaves", "distanceKm": 6, "pace": { "fast": "6:50", "slow": "7:25" }, "shoe": "Vomero", "note": "Progresiones muy controladas, sensación de \"piernas vivas\", no velocidad — para si sientes el pie.", "garminHint": "Corre 5-5.5 km libres a tu ritmo Z2 y termina con: Repetir 4x [15 seg progresión suave / 45 seg trote o caminar]." },
-        { "day": "Mié", "date": "2026-09-09", "kind": "rodaje", "title": "7 km Z2 continuo", "distanceKm": 7, "pace": { "fast": "6:50", "slow": "7:25" }, "shoe": "Vomero", "garminHint": "Sin estructura — actividad de correr libre a ritmo Z2, sin tempo todavía." },
-        { "day": "Vie", "date": "2026-09-11", "kind": "rodaje", "title": "5 km fácil", "distanceKm": 5, "pace": { "fast": "6:50", "slow": "7:25" }, "shoe": "Vomero", "garminHint": "Sin estructura — actividad de correr libre a ritmo Z2." },
-        { "day": "Dom", "date": "2026-09-13", "kind": "long_run", "title": "11 km cómodo, sin cierre firme", "distanceKm": 11, "pace": { "fast": "6:50", "slow": "7:25" }, "shoe": "Vomero", "note": "El 10K de control original se cancela por la lesión — este domingo es solo un long run cómodo, Z2 de principio a fin.", "garminHint": "Sin estructura — actividad de correr libre a ritmo Z2, todo el recorrido." }
+        { "day": "Lun", "date": "2026-09-07", "kind": "rodaje", "title": "8 km Z2 + 6×20\" strides", "distanceKm": 8, "pace": { "fast": "6:50", "slow": "7:25" }, "shoe": "Vomero", "garminHint": "Corre 6.5-7 km libres a tu ritmo Z2 y termina con: Repetir 6x [20 seg progresión subiendo el ritmo / 40 seg trote suave o caminar]." },
+        { "day": "Mié", "date": "2026-09-09", "kind": "tempo", "title": "Tempo 20 min continuo", "structure": "20 min continuo dentro de rodaje de 8 km", "distanceKm": 8, "pace": { "fast": "5:40", "slow": "5:55" }, "shoe": "Evo SL", "note": "Primer tempo desde la lesión — controlado, no al límite. Si el pie avisa, corta el tempo y termina trotando.", "garminHint": "Calentamiento 10-12 min trote suave → Correr 20 min continuos a 5:40-5:55/km → Enfriamiento 10-12 min trote suave." },
+        { "day": "Vie", "date": "2026-09-11", "kind": "rodaje", "title": "6 km fácil", "distanceKm": 6, "pace": { "fast": "6:50", "slow": "7:25" }, "shoe": "Vomero", "garminHint": "Sin estructura — actividad de correr libre a ritmo Z2." },
+        { "day": "Dom", "date": "2026-09-13", "kind": "long_run", "title": "14 km, últimos 3 km firmes", "distanceKm": 14, "pace": { "fast": "6:50", "slow": "7:25" }, "shoe": "Vomero", "note": "Últimos 3 km más firmes, ~6:20-6:35/km. El 10K de control original se cancela por la lesión.", "garminHint": "Sin estructura obligatoria — corre libre a ritmo cómodo y marca un lap manual 3 km antes del final para ver el ritmo del cierre por separado." }
       ]
     },
     {
@@ -291,14 +292,14 @@
       "startDate": "2026-09-14",
       "endDate": "2026-09-20",
       "phase": "Fase específica",
-      "focus": "Reintroducción de calidad, con cautela",
-      "totalKmLabel": "~34-36 km",
-      "highlight": "Primera semana con algo de ritmo desde la lesión — si el pie responde bien, seguimos progresando.",
+      "focus": "Ritmo de carrera sostenido",
+      "totalKmLabel": "~44-46 km",
+      "highlight": "Retomamos ritmo de carrera — si el pie sigue respondiendo bien, seguimos según lo planeado.",
       "days": [
-        { "day": "Lun", "date": "2026-09-14", "kind": "rodaje", "title": "8 km Z2", "distanceKm": 8, "pace": { "fast": "6:45", "slow": "7:20" }, "shoe": "Vomero", "garminHint": "Sin estructura — actividad de correr libre a ritmo Z2." },
-        { "day": "Mié", "date": "2026-09-16", "kind": "tempo", "title": "Tempo corto 15 min continuo", "structure": "15 min continuo dentro de rodaje de 7 km", "distanceKm": 7, "pace": { "fast": "5:35", "slow": "5:50" }, "shoe": "Evo SL", "note": "Primer tempo desde la lesión — controlado, no al límite. Si el pie avisa, corta el tempo y termina trotando.", "garminHint": "Calentamiento 10-12 min trote suave → Correr 15 min continuos a 5:35-5:50/km → Enfriamiento 10-12 min trote suave." },
-        { "day": "Vie", "date": "2026-09-18", "kind": "rodaje", "title": "6 km fácil", "distanceKm": 6, "pace": { "fast": "6:45", "slow": "7:20" }, "shoe": "Vomero", "garminHint": "Sin estructura — actividad de correr libre a ritmo Z2." },
-        { "day": "Dom", "date": "2026-09-20", "kind": "long_run", "title": "14 km, últimos 3 km firmes", "distanceKm": 14, "pace": { "fast": "6:45", "slow": "7:20" }, "shoe": "Vomero", "note": "Últimos 3 km más firmes, ~6:20-6:35/km — nada de ritmo de carrera todavía, solo un poco más firme.", "garminHint": "Sin estructura obligatoria — corre libre a ritmo cómodo y marca un lap manual 3 km antes del final para ver el ritmo del cierre por separado." }
+        { "day": "Lun", "date": "2026-09-14", "kind": "rodaje", "title": "9 km Z2", "distanceKm": 9, "pace": { "fast": "6:40", "slow": "7:15" }, "shoe": "Vomero", "garminHint": "Sin estructura — actividad de correr libre a ritmo Z2." },
+        { "day": "Mié", "date": "2026-09-16", "kind": "ritmo_carrera", "title": "3×3 km a ritmo objetivo", "structure": "3×3 km a ritmo objetivo, rec. 3' trote (~13 km)", "distanceKm": 13, "pace": { "fast": "5:38", "slow": "5:41" }, "shoe": "Evo SL", "garminHint": "Calentamiento 12-15 min trote suave + progresiones → Repetir 3x [Correr 3 km a 5:38-5:41/km / Trotar 3 min de recuperación muy suave] → Enfriamiento 10 min trote suave." },
+        { "day": "Vie", "date": "2026-09-18", "kind": "rodaje", "title": "6 km fácil", "distanceKm": 6, "pace": { "fast": "6:40", "slow": "7:15" }, "shoe": "Vomero", "garminHint": "Sin estructura — actividad de correr libre a ritmo Z2." },
+        { "day": "Dom", "date": "2026-09-20", "kind": "long_run", "title": "17 km, últimos 6 km a ritmo de carrera", "distanceKm": 17, "pace": { "fast": "6:15", "slow": "6:45" }, "shoe": "Vomero", "note": "Últimos 6 km al ritmo de carrera objetivo, 5:38-5:41/km", "garminHint": "Sin estructura obligatoria — corre libre a ritmo cómodo los primeros 11 km, marca un lap manual y corre los últimos 6 km a 5:38-5:41/km." }
       ]
     },
     {
@@ -308,13 +309,13 @@
       "startDate": "2026-09-21",
       "endDate": "2026-09-27",
       "phase": "Fase específica",
-      "focus": "Ritmo de carrera + volumen",
-      "totalKmLabel": "~40-42 km",
+      "focus": "Pico de volumen",
+      "totalKmLabel": "~46-48 km",
       "days": [
-        { "day": "Lun", "date": "2026-09-21", "kind": "rodaje", "title": "9 km Z2", "distanceKm": 9, "pace": { "fast": "6:40", "slow": "7:15" }, "shoe": "Vomero", "garminHint": "Sin estructura — actividad de correr libre a ritmo Z2." },
-        { "day": "Mié", "date": "2026-09-23", "kind": "ritmo_carrera", "title": "2×3 km a ritmo objetivo", "structure": "2×3 km a ritmo objetivo, rec. 3' trote (~10 km)", "distanceKm": 10, "pace": { "fast": "5:38", "slow": "5:41" }, "shoe": "Evo SL", "garminHint": "Calentamiento 12-15 min trote suave + progresiones → Repetir 2x [Correr 3 km a 5:38-5:41/km / Trotar 3 min de recuperación muy suave] → Enfriamiento 10 min trote suave." },
-        { "day": "Vie", "date": "2026-09-25", "kind": "rodaje", "title": "6 km fácil", "distanceKm": 6, "pace": { "fast": "6:40", "slow": "7:15" }, "shoe": "Vomero", "garminHint": "Sin estructura — actividad de correr libre a ritmo Z2." },
-        { "day": "Dom", "date": "2026-09-27", "kind": "long_run", "title": "16 km, últimos 6 km a ritmo de carrera", "distanceKm": 16, "pace": { "fast": "6:20", "slow": "6:50" }, "shoe": "Vomero", "note": "Últimos 6 km al ritmo de carrera objetivo, 5:38-5:41/km", "garminHint": "Sin estructura obligatoria — corre libre a ritmo cómodo los primeros 10 km, marca un lap manual y corre los últimos 6 km a 5:38-5:41/km." }
+        { "day": "Lun", "date": "2026-09-21", "kind": "rodaje", "title": "10 km Z2", "distanceKm": 10, "pace": { "fast": "6:35", "slow": "7:10" }, "shoe": "Vomero", "garminHint": "Sin estructura — actividad de correr libre a ritmo Z2." },
+        { "day": "Mié", "date": "2026-09-23", "kind": "intervalos", "title": "6×1000 m rec. 2' trote", "distanceKm": 12, "pace": { "fast": "4:50", "slow": "5:00" }, "shoe": "Evo SL", "garminHint": "Calentamiento 12-15 min trote suave + movilidad → Repetir 6x [Correr 1000 m a 4:50-5:00/km / Trotar 2 min de recuperación muy suave] → Enfriamiento 10 min trote suave." },
+        { "day": "Vie", "date": "2026-09-25", "kind": "rodaje", "title": "6 km fácil", "distanceKm": 6, "pace": { "fast": "6:35", "slow": "7:10" }, "shoe": "Vomero", "garminHint": "Sin estructura — actividad de correr libre a ritmo Z2." },
+        { "day": "Dom", "date": "2026-09-27", "kind": "long_run", "title": "18-19 km, últimos 8 km a ritmo de carrera", "distanceKm": 18.5, "pace": { "fast": "6:05", "slow": "6:30" }, "shoe": "Vomero", "note": "Últimos 8 km al ritmo de carrera, 5:35-5:40/km", "garminHint": "Sin estructura obligatoria — corre libre a ritmo cómodo los primeros 10-11 km, marca un lap manual y corre los últimos 8 km a 5:35-5:40/km." }
       ]
     },
     {
@@ -324,14 +325,14 @@
       "startDate": "2026-09-28",
       "endDate": "2026-10-04",
       "phase": "Fase específica",
-      "focus": "Pico específico (ajustado por la lesión)",
-      "totalKmLabel": "~42-44 km",
-      "highlight": "Tu semana más exigente desde el regreso — el pico se recorta un poco frente al plan original para no arriesgar el pie.",
+      "focus": "Pico específico",
+      "totalKmLabel": "~46-48 km",
+      "highlight": "Tu semana más exigente desde el regreso — muy cerca del pico original. Sigue atento a cualquier molestia de fascia en las sesiones de ritmo.",
       "days": [
-        { "day": "Lun", "date": "2026-09-28", "kind": "rodaje", "title": "8 km Z2", "distanceKm": 8, "pace": { "fast": "6:35", "slow": "7:10" }, "shoe": "Vomero", "garminHint": "Sin estructura — actividad de correr libre a ritmo Z2." },
-        { "day": "Mié", "date": "2026-09-30", "kind": "ritmo_carrera", "title": "2×4 km a ritmo de carrera", "structure": "2×4 km a ritmo de carrera, rec. 4' trote (~12 km)", "distanceKm": 12, "pace": { "fast": "5:35", "slow": "5:40" }, "shoe": "Evo SL", "garminHint": "Calentamiento 12-15 min trote suave + progresiones → Repetir 2x [Correr 4 km a 5:35-5:40/km / Trotar 4 min de recuperación muy suave] → Enfriamiento 10 min trote suave." },
+        { "day": "Lun", "date": "2026-09-28", "kind": "rodaje", "title": "9 km Z2", "distanceKm": 9, "pace": { "fast": "6:35", "slow": "7:10" }, "shoe": "Vomero", "garminHint": "Sin estructura — actividad de correr libre a ritmo Z2." },
+        { "day": "Mié", "date": "2026-09-30", "kind": "ritmo_carrera", "title": "2×5 km a ritmo de carrera", "structure": "2×5 km a ritmo de carrera, rec. 5' trote (~14 km)", "distanceKm": 14, "pace": { "fast": "5:35", "slow": "5:40" }, "shoe": "Evo SL", "garminHint": "Calentamiento 12-15 min trote suave + progresiones → Repetir 2x [Correr 5 km a 5:35-5:40/km / Trotar 5 min de recuperación muy suave] → Enfriamiento 10 min trote suave." },
         { "day": "Vie", "date": "2026-10-02", "kind": "rodaje", "title": "6 km fácil", "distanceKm": 6, "pace": { "fast": "6:35", "slow": "7:10" }, "shoe": "Vomero", "garminHint": "Sin estructura — actividad de correr libre a ritmo Z2." },
-        { "day": "Dom", "date": "2026-10-04", "kind": "long_run", "title": "18 km, simulacro, últimos 6 km a ritmo de carrera", "structure": "Simulacro largo", "distanceKm": 18, "pace": { "fast": "6:10", "slow": "6:40" }, "shoe": "Vomero", "note": "Simulacro: últimos 6 km al ritmo de carrera, 5:35-5:40/km. Buen día para probar ropa y nutrición de carrera.", "garminHint": "Sin estructura obligatoria — corre libre a ritmo cómodo, marca un lap manual y corre los últimos 6 km a 5:35-5:40/km." }
+        { "day": "Dom", "date": "2026-10-04", "kind": "long_run", "title": "19 km, simulacro largo, últimos 6 km a ritmo de carrera", "structure": "Simulacro largo", "distanceKm": 19, "pace": { "fast": "6:10", "slow": "6:40" }, "shoe": "Vomero", "note": "Simulacro: últimos 6 km al ritmo de carrera, 5:32-5:37/km. Buen día para probar la ropa y el gel/hidratación que usarás en la carrera.", "garminHint": "Sin estructura obligatoria — corre libre a ritmo cómodo, marca un lap manual y corre los últimos 6 km a 5:32-5:37/km." }
       ]
     },
     {
