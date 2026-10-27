@@ -80,7 +80,7 @@ export default async function DashboardPage() {
   const marqueeItems = [
     { text: `${daysLeft} días para la carrera`, spotlight: true },
     { text: `Mejor 10K ${diag.best10k.timeLabel}` },
-    { text: currentWeek ? `${currentWeek.label} de 13` : "Plan de 13 semanas" },
+    { text: currentWeek ? `${currentWeek.label} de ${WEEKS.length}` : `Plan de ${WEEKS.length} semanas` },
     { text: `Objetivo ${RACE.goalTimeLabel}`, spotlight: true },
     { text: `Mejor medio ${diag.bestHalf.timeLabel}` },
     { text: `Predicción Riegel ${diag.riegelPrediction}` },

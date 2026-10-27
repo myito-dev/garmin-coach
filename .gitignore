@@ -49,3 +49,6 @@ skills-lock.json
 # typescript
 *.tsbuildinfo
 next-env.d.ts
+dev.log
+dev-out.log
+dev-err.log

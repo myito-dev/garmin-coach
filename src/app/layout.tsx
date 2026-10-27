@@ -3,6 +3,7 @@ import { Bricolage_Grotesque, Geist_Mono, Inter } from "next/font/google";
 import { NavBar } from "@/components/NavBar";
 import "./globals.css";
 import { cn } from "@/lib/utils";
+import { RACE, WEEKS } from "@/data/trainingPlan";
 
 const inter = Inter({ subsets: ["latin"], variable: "--font-inter" });
 
@@ -19,8 +20,7 @@ const bricolage = Bricolage_Grotesque({
 
 export const metadata: Metadata = {
   title: "Garmin Coach by Mario Galindo",
-  description:
-    "Panel de entrenamiento conectado a Garmin Connect para el Medio Maratón de Puebla: plan de 13 semanas, comparación de sesiones y análisis de cada entrenamiento.",
+  description: `Panel de entrenamiento conectado a Garmin Connect para ${RACE.name}: plan de ${WEEKS.length} semanas, comparación de sesiones y análisis de cada entrenamiento.`,
   manifest: "/manifest.json",
 };
 

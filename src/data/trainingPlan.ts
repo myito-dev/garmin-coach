@@ -2,7 +2,7 @@
 // and exposes it as the same typed constants the rest of the app already uses.
 // To follow a different plan later: add a new JSON file conforming to
 // src/lib/planSchema.ts under src/data/plans/, then point ACTIVE_PLAN at it.
-import ACTIVE_PLAN from "./plans/puebla-half-2026.json";
+import ACTIVE_PLAN from "./plans/10k-speed-block-2026.json";
 import { paceRange } from "@/lib/format";
 import { trainingPlanFileSchema } from "@/lib/planSchema";
 import type {
@@ -19,12 +19,16 @@ function toPace(field: { fast: string; slow: string } | undefined) {
   return field ? paceRange(field.fast, field.slow) : undefined;
 }
 
+const goalPaceSecPerKm = toPace({ fast: parsed.race.goalPace, slow: parsed.race.goalPace })!.fastSecPerKm;
+
 export const RACE: RaceInfo = {
   name: parsed.race.name,
   date: parsed.race.date,
   goalTimeLabel: parsed.race.goalTimeLabel,
-  goalSeconds: 2 * 3600,
-  goalPaceSecPerKm: toPace({ fast: parsed.race.goalPace, slow: parsed.race.goalPace })!.fastSecPerKm,
+  // Derived from pace × distance instead of hardcoded — the half-marathon
+  // plan's goal happened to be exactly 2h, which masked this not being wired up.
+  goalSeconds: Math.round(goalPaceSecPerKm * parsed.race.distanceKm),
+  goalPaceSecPerKm,
   city: parsed.race.city,
   distanceKm: parsed.race.distanceKm,
 };
